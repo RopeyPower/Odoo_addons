@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_vat_report" model="ir.ui.view">
+		<field name="name">vat.report.tree.view</field>
+		<field name="model">vat.report</field>
+		<field name="arch" type="xml">
+			<tree string="VAT Report" create="false" delete="false">
+				<field name="t1_amount" />
+				<button style="color:blue;" type="object" name="view_t1_items" string="View Sales Vatable items" />
+				<field name="t2_amount" />
+				<button type="object" name="view_t2_items" string="View Purchase Vatable items" />
+				<field name="t3_amount" />
+				<field name="t4_amount" />
+				<field name="es1_amount" />
+				<button type="object" name="view_es1_items" string="View Intra-EU sales" />
+				<field name="es2_amount" />
+				<button type="object" name="view_es2_items" string="View Intra-EU purchases" />
+			</tree>
+		</field>
+	</record>
+</odoo>
