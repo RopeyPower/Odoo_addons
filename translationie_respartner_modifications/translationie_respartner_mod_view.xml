@@ -1,0 +1,172 @@
+<openerp>
+	<data>
+		
+		<record id="act_res_partner_2_purchase_orders" model="ir.actions.act_window">
+			<field name="name">Invoices</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+			<field name="context">{'search_default_partner_id': active_id, 'show_sale': True}</field>
+			<field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Create a Quotation, the first step of a new sale.
+				</p><p>
+					Your next actions should flow efficiently: confirm the Quotation to a Sale Order, then create the Invoice and collect the Payment.
+				</p><p>
+					Note that once a Quotation becomes a Sale Order, it will be moved from the Quotations list to the Sales Order list.
+				</p>
+			</field>
+		</record>
+
+		<record id="res_partner_view_buttons" model="ir.ui.view">
+			<field name="name">res.partner.view.buttons2</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="priority" eval="20"/>
+			<field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
+			<field name="arch" type="xml">
+				<div name="button_box" position="inside">
+					<button class="oe_stat_button" type="action" name="%(act_res_partner_2_purchase_orders)d" attrs="{'invisible': [('supplier', '=', False)]}" icon="fa-pencil-square-o">
+						<div class="o_form_field o_stat_info">
+							<span class="o_stat_value"><field name="x_po_total_amount" widget="monetary" string="Purchase Orders"/></span>
+							<span class="o_stat_text">Purchase Orders</span>
+						</div>
+					</button>
+				</div>
+			</field>
+		</record>
+		
+		<record id="translationie_respartner_mod_form" model="ir.ui.view">
+			<field name="name">res.partner.modification.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='website']" position="before">
+					<field name="x_timezone" attrs="{'invisible':[('supplier','!=',True)]}" />
+				</xpath>
+				<xpath expr="//field[@name='website']" position="after">
+					<field name="x_native" attrs="{'invisible':[('supplier','!=',True)]}" />
+					<field name="x_second_lang" attrs="{'invisible':[('supplier','!=',True)]}"/>
+					<field name="x_third_lang" attrs="{'invisible':[('supplier','!=',True)]}"/>
+					<field name="x_fourth_lang" attrs="{'invisible':[('supplier','!=',True)]}"/>
+				</xpath>
+				<xpath expr="//field[@name='function']" position="before">
+					<field name="x_status" attrs="{'invisible':[('supplier','!=',True)]}" />
+				</xpath>
+				<xpath expr="//page[@name='internal_notes']" position="replace">
+					<page name="internal_notes" string="Internal Notes">
+						<group>
+							<field name="comment" placeholder="Internal note..."/>
+							<field name="x_specialisation" attrs="{'invisible':[('supplier','!=',True)]}" />
+							<field name="x_training_notes" attrs="{'invisible':[('supplier','!=',True)]}" />
+						</group>
+					</page>
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="after">
+					<field name="x_rate_per_word" attrs="{'invisible':[('supplier','!=',True)],'required':[('supplier','=',True)]}"/>
+					<field name="x_rate_info" attrs="{'invisible':[('supplier','!=',True)]}"/>
+				</xpath>
+				<page name="sales_purchases" position="after">
+					<page name="cat_tools" string="CAT Tools" attrs="{'invisible':[('supplier','!=',True)]}">
+						<group>
+							<field name="x_primary_cat"/>
+							<field name="x_other_cat"/>
+						</group>
+					</page>
+					<!--<page name="lang_pairs" string="Language Pairs" attrs="{'invisible':[('supplier','!=',True)]}">
+							<field name="x_language_pair">
+								<form string="Language Pairs">
+									<group>
+										<field name="x_from" />
+									</group>
+									<group>
+										<field name="x_to" />
+									</group>
+								</form>
+								<tree string="Language Pairs" >
+									<field name="x_from" />
+									<field name="x_to"/>
+								</tree>
+							</field>
+					</page>-->
+				</page>
+				<xpath expr="//field[@name='category_id']" position="after">
+					<field name="x_legacy_account" attrs="{'invisible':[('customer','!=',True)]}"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="translationie_respartner_mod_tree" model="ir.ui.view">
+			<field name="name">res.partner.modification.tree</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_tree"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='email']" position="after">
+					<field name="x_native" />
+					<field name="x_second_lang" />
+					<field name="x_third_lang" />
+					<field name="x_fourth_lang" />
+					<field name="comment" />
+					<field name="x_specialisation" />
+					<field name="x_rate_per_word" />
+					<field name="x_rate_info" />
+					<field name="x_status" />
+				</xpath>
+				<xpath expr="//field[@name='x_status']" position="attributes">
+					<attribute name="bg_color">green:x_status=='good';yellow:x_status=='acceptable';orange:x_status=='poor';pink:x_status=='unavailable';red:x_status=='blacklist';grey:x_status=='unused'</attribute>
+					<attribute name="fg_color">white:x_status=='good';black:x_status=='acceptable';black:x_status=='poor';black:x_status=='unavailable';white:x_status=='blacklist';white:x_status=='unused'</attribute>
+				</xpath>
+				<xpath expr="//field[@name='display_name']" position="attributes">
+					<attribute name="bg_color">green:x_status=='good';yellow:x_status=='acceptable';orange:x_status=='poor';pink:x_status=='unavailable';red:x_status=='blacklist';grey:x_status=='unused'</attribute>
+					<attribute name="fg_color">white:x_status=='good';black:x_status=='acceptable';black:x_status=='poor';black:x_status=='unavailable';white:x_status=='blacklist';white:x_status=='unused'</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="action_partner_supplier_tree_view" model="ir.actions.act_window.view">
+				<field eval="0" name="sequence"/>
+				<field name="view_mode">tree</field>
+				<field name="view_id" ref="base.view_partner_tree"/>
+				<field name="act_window_id" ref="base.action_partner_supplier_form"/>
+		</record>
+		<record id="action_partner_supplier_kanban_view" model="ir.actions.act_window.view">
+				<field eval="1" name="sequence"/>
+				<field name="view_mode">kanban</field>
+				<field name="view_id" ref="base.res_partner_kanban_view"/>
+				<field name="act_window_id" ref="base.action_partner_supplier_form"/>
+		</record>
+		<record id="action_partner_supplier_form_view" model="ir.actions.act_window.view">
+				<field eval="2" name="sequence"/>
+				<field name="view_mode">form</field>
+				<field name="view_id" ref="base.view_partner_form"/>
+				<field name="act_window_id" ref="base.action_partner_supplier_form"/>
+		</record>
+		
+		<record id="translationie_respartner_mod_select" model="ir.ui.view">
+			<field name="name">res.partner.modification.select</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_res_partner_filter"/>
+			<field name="arch" type="xml">
+				<xpath expr="//filter[@name='customer']" position="replace">
+					<filter string="Customers" name="customer" domain="[('customer','=',1)]" />
+				</xpath>
+				<field name="parent_id" position="after">
+					<field name="x_native"/>
+					<field name="x_second_lang"/>
+					<field name="x_third_lang" />
+					<field name="x_fourth_lang" />
+					<field name="email"/>
+				</field>
+				<group name="group_by" position="inside">
+					<filter string="Status" context="{'group_by': 'x_status'}"/>
+					<filter string="Native Language" context="{'group_by': 'x_native'}"/>
+					<filter string="Second Language" context="{'group_by': 'x_second_lang'}"/>
+					<filter string="Third Language" context="{'group_by': 'x_third_lang'}"/>
+					<filter string="Fourth Language" context="{'group': 'x_fourth_lang'}"/>
+				</group>
+			</field>
+		</record>
+		
+	</data>
+</openerp>
