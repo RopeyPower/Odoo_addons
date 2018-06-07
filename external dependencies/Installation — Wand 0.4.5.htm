@@ -1,0 +1,455 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Installation — Wand 0.4.5</title>
+    
+    <link rel="stylesheet" href="Installation%20%E2%80%94%20Wand%200.4.5_files/wand.css" type="text/css">
+    <link rel="stylesheet" href="Installation%20%E2%80%94%20Wand%200.4.5_files/pygments.css" type="text/css">
+    <link rel="stylesheet" href="Installation%20%E2%80%94%20Wand%200.4.5_files/badge_only.css" type="text/css">
+    
+    <script type="text/javascript" async="" src="Installation%20%E2%80%94%20Wand%200.4.5_files/ga.js"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="Installation%20%E2%80%94%20Wand%200.4.5_files/jquery-2.js"></script>
+    <script type="text/javascript" src="Installation%20%E2%80%94%20Wand%200.4.5_files/jquery-migrate-1.js"></script>
+    <script type="text/javascript" src="Installation%20%E2%80%94%20Wand%200.4.5_files/underscore.js"></script>
+    <script type="text/javascript" src="Installation%20%E2%80%94%20Wand%200.4.5_files/doctools.js"></script>
+    <script type="text/javascript" src="Installation%20%E2%80%94%20Wand%200.4.5_files/readthedocs-doc-embed.js"></script>
+    <link rel="index" title="Index" href="http://docs.wand-py.org/en/latest/genindex.html">
+    <link rel="search" title="Search" href="http://docs.wand-py.org/en/latest/search.html">
+    <link rel="next" title="Reading images" href="http://docs.wand-py.org/en/latest/guide/read.html">
+    <link rel="prev" title="What’s new in Wand 0.4?" href="http://docs.wand-py.org/en/latest/whatsnew/0.4.html">
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="Installation%20%E2%80%94%20Wand%200.4.5_files/small_flask.css" type="text/css" rel="stylesheet">
+
+  
+<!-- RTD Extra Head -->
+
+<!-- 
+Always link to the latest version, as canonical.
+http://docs.readthedocs.org/en/latest/canonical.html
+-->
+<link rel="canonical" href="http://docs.wand-py.org/en/0.4.4/guide/install.html">
+
+<link rel="stylesheet" href="Installation%20%E2%80%94%20Wand%200.4.5_files/readthedocs-doc-embed.css" type="text/css">
+
+<script type="text/javascript" src="Installation%20%E2%80%94%20Wand%200.4.5_files/readthedocs-data.js"></script>
+
+<!-- Add page-specific data, which must exist in the page js, not global -->
+<script type="text/javascript">
+READTHEDOCS_DATA['page'] = 'guide/install' 		
+READTHEDOCS_DATA['source_suffix'] = '.rst'
+</script>
+
+<script type="text/javascript" src="Installation%20%E2%80%94%20Wand%200.4.5_files/readthedocs-dynamic-include.js"></script>
+
+<!-- end RTD <extrahead> --></head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="http://docs.wand-py.org/en/latest/genindex.html" title="General Index" accesskey="I">index</a></li>
+        <li class="right">
+          <a href="http://docs.wand-py.org/en/latest/py-modindex.html" title="Python Module Index">modules</a> |</li>
+        <li class="right">
+          <a href="http://docs.wand-py.org/en/latest/guide/read.html" title="Reading images" accesskey="N">next</a> |</li>
+        <li class="right">
+          <a href="http://docs.wand-py.org/en/latest/whatsnew/0.4.html" title="What’s new in Wand 0.4?" accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="http://docs.wand-py.org/en/latest/index.html">Wand</a> »</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Wand itself can be installed from <a class="reference external" href="http://pypi.python.org/pypi/Wand">PyPI</a> using <strong class="program">pip</strong>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install Wand
+</pre></div>
+</div>
+<p>Wand is a Python binding of <a class="reference external" href="http://www.imagemagick.org/">ImageMagick</a>, so you have to install it as well:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#install-imagemagick-debian"><span class="std std-ref">Debian/Ubuntu</span></a></li>
+<li><a class="reference internal" href="#install-imagemagick-redhat"><span class="std std-ref">Fedora/CentOS</span></a></li>
+<li><a class="reference internal" href="#install-imagemagick-mac"><span class="std std-ref">Mac</span></a></li>
+<li><a class="reference internal" href="#install-imagemagick-windows"><span class="std std-ref">Windows</span></a></li>
+<li><a class="reference internal" href="#explicit-link"><span class="std std-ref">Explicitly link to specific ImageMagick</span></a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Wand yet doesn’t support ImageMagick 7 which has several incompatible APIs
+with previous versions.  For more details, see the issue <a class="reference external" href="https://github.com/dahlia/wand/issues/287">#287</a>.</p>
+</div>
+<p>Or you can simply install Wand and its entire dependencies using the package
+manager of your system (it’s way convenient but the version might be outdated):</p>
+<ul class="simple">
+<li><a class="reference internal" href="#install-wand-debian"><span class="std std-ref">Debian/Ubuntu</span></a></li>
+<li><a class="reference internal" href="#install-wand-fedora"><span class="std std-ref">Fefora</span></a></li>
+<li><a class="reference internal" href="#install-wand-freebsd"><span class="std std-ref">FreeBSD</span></a></li>
+</ul>
+<div class="section" id="install-imagemagick-on-debian-ubuntu">
+<span id="install-imagemagick-debian"></span><h2>Install ImageMagick on Debian/Ubuntu<a class="headerlink" href="#install-imagemagick-on-debian-ubuntu" title="Permalink to this headline">¶</a></h2>
+<p>If you’re using Linux distributions based on Debian like Ubuntu, it can be
+easily installed using APT:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install libmagickwand-dev
+</pre></div>
+</div>
+<p>If you need SVG, WMF, OpenEXR, DjVu, and Graphviz support you have to install
+<code class="docutils literal"><span class="pre">libmagickcore5-extra</span></code> as well:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install libmagickcore5-extra
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-imagemagick-on-fedora-centos">
+<span id="install-imagemagick-redhat"></span><h2>Install ImageMagick on Fedora/CentOS<a class="headerlink" href="#install-imagemagick-on-fedora-centos" title="Permalink to this headline">¶</a></h2>
+<p>If you’re using Linux distributions based on Redhat like Fedora or CentOS,
+it can be installed using Yum:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> yum update
+<span class="gp">$</span> yum install ImageMagick-devel
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-imagemagick-on-mac">
+<span id="install-imagemagick-mac"></span><h2>Install ImageMagick on Mac<a class="headerlink" href="#install-imagemagick-on-mac" title="Permalink to this headline">¶</a></h2>
+<p>You need one of <a class="reference external" href="http://mxcl.github.com/homebrew/">Homebrew</a> or <a class="reference external" href="http://www.macports.org/">MacPorts</a> to install ImageMagick.</p>
+<dl class="docutils">
+<dt>Homebrew</dt>
+<dd><div class="first highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> brew install imagemagick
+</pre></div>
+</div>
+<p>If <a class="reference internal" href="http://docs.wand-py.org/en/latest/guide/resizecrop.html#seam-carving"><span class="std std-ref">seam carving</span></a> (<a class="reference internal" href="http://docs.wand-py.org/en/latest/wand/image.html#wand.image.BaseImage.liquid_rescale" title="wand.image.BaseImage.liquid_rescale"><code class="xref py py-meth docutils literal"><span class="pre">Image.liquid_rescale()</span></code></a>) is needed you have install
+<a class="reference external" href="http://liblqr.wikidot.com/">liblqr</a> as well:</p>
+<div class="last highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> brew install imagemagick --with-liblqr
+</pre></div>
+</div>
+</dd>
+<dt>MacPorts</dt>
+<dd><div class="first highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo port install imagemagick
+</pre></div>
+</div>
+<p>If your Python in not installed using MacPorts, you have to export
+<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal"><span class="pre">MAGICK_HOME</span></code> path as well.  Because Python that is not installed
+using MacPorts doesn’t look up <code class="file docutils literal"><span class="pre">/opt/local</span></code>, the default path prefix
+of MacPorts packages.</p>
+<div class="last highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">export</span> <span class="nv">MAGICK_HOME</span><span class="o">=</span>/opt/local
+</pre></div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="install-imagemagick-on-windows">
+<span id="install-imagemagick-windows"></span><h2>Install ImageMagick on Windows<a class="headerlink" href="#install-imagemagick-on-windows" title="Permalink to this headline">¶</a></h2>
+<p>You could build ImageMagick by yourself, but it requires a build tool chain
+like Visual Studio to compile it.  The easiest way is simply downloading
+a prebuilt binary of ImageMagick for your architecture (<code class="docutils literal"><span class="pre">win32</span></code> or
+<code class="docutils literal"><span class="pre">win64</span></code>).</p>
+<p>You can download it from the following link:</p>
+<p><a class="reference external" href="http://www.imagemagick.org/download/binaries/">http://www.imagemagick.org/download/binaries/</a></p>
+<p>Choose a binary for your architecture:</p>
+<dl class="docutils">
+<dt>Windows 32-bit</dt>
+<dd><a class="reference external" href="http://www.imagemagick.org/download/binaries/ImageMagick-6.9.3-1-Q16-x86-dll.exe">ImageMagick-6.9.3-1-Q16-x86-dll.exe</a></dd>
+<dt>Windows 64-bit</dt>
+<dd><a class="reference external" href="http://www.imagemagick.org/download/binaries/ImageMagick-6.9.3-1-Q16-x64-dll.exe">ImageMagick-6.9.3-1-Q16-x64-dll.exe</a></dd>
+</dl>
+<img alt="../_images/windows-setup.png" src="Installation%20%E2%80%94%20Wand%200.4.5_files/windows-setup.png">
+<p>Note that you have to check <span class="guilabel">Install development headers and
+libraries for C and C++</span> to make Wand able to link to it.</p>
+<a class="reference internal image-reference" href="http://docs.wand-py.org/en/latest/_images/windows-envvar.png"><img alt="../_images/windows-envvar.png" src="Installation%20%E2%80%94%20Wand%200.4.5_files/windows-envvar.png" style="width: 465px; height: 315px;"></a>
+<p>Lastly you have to set <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal"><span class="pre">MAGICK_HOME</span></code> environment variable to the path
+of ImageMagick (e.g. <code class="file docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\ImageMagick-6.9.3-Q16</span></code>).
+You can set it in <span class="menuselection">Computer ‣ Properties ‣
+Advanced system settings ‣ Advanced ‣ Enviro<span class="accelerator">n</span>ment Variables...</span>.</p>
+</div>
+<div class="section" id="explicitly-link-to-specific-imagemagick">
+<span id="explicit-link"></span><h2>Explicitly link to specific ImageMagick<a class="headerlink" href="#explicitly-link-to-specific-imagemagick" title="Permalink to this headline">¶</a></h2>
+<p>Although Wand tries searching operating system’s standard library paths for
+a ImageMagick installation, sometimes you need to explicitly specify
+the path of ImageMagick installation.</p>
+<p>In that case, you can give the path to Wand by setting <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal"><span class="pre">MAGICK_HOME</span></code>.
+Wand respects <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal"><span class="pre">MAGICK_HOME</span></code>, the environment variable which has been
+reserved by ImageMagick.</p>
+</div>
+<div class="section" id="install-wand-on-debian-ubuntu">
+<span id="install-wand-debian"></span><h2>Install Wand on Debian/Ubuntu<a class="headerlink" href="#install-wand-on-debian-ubuntu" title="Permalink to this headline">¶</a></h2>
+<p>Wand itself is already packaged in Debian/Ubuntu APT repository: <a class="reference external" href="http://packages.debian.org/sid/python-wand">python-wand</a>.
+You can install it using <strong class="program">apt-get</strong> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install python-wand
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-wand-on-fedora">
+<span id="install-wand-fedora"></span><h2>Install Wand on Fedora<a class="headerlink" href="#install-wand-on-fedora" title="Permalink to this headline">¶</a></h2>
+<p>Wand itself is already packaged in Fedora package DB: <a class="reference external" href="https://admin.fedoraproject.org/pkgdb/package/python-wand/">python-wand</a>.
+You can install it using <strong class="program">dnf</strong> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> dnf install python-wand   <span class="c1"># Python 2</span>
+<span class="gp">$</span> dnf install python3-wand  <span class="c1"># Python 3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-wand-on-freebsd">
+<span id="install-wand-freebsd"></span><h2>Install Wand on FreeBSD<a class="headerlink" href="#install-wand-on-freebsd" title="Permalink to this headline">¶</a></h2>
+<p>Wand itself is already packaged in FreeBSD ports collection: <a class="reference external" href="http://www.freebsd.org/cgi/cvsweb.cgi/ports/graphics/py-wand/">py-wand</a>.
+You can install it using <strong class="program">pkg_add</strong> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> pkg_add -r py-wand
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="http://docs.wand-py.org/en/latest/index.html">
+              <img class="logo" src="Installation%20%E2%80%94%20Wand%200.4.5_files/wand.png" alt="Logo">
+            </a></p>
+  
+
+  <h3><a href="http://docs.wand-py.org/en/latest/index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#install-imagemagick-on-debian-ubuntu">Install ImageMagick on Debian/Ubuntu</a></li>
+<li><a class="reference internal" href="#install-imagemagick-on-fedora-centos">Install ImageMagick on Fedora/CentOS</a></li>
+<li><a class="reference internal" href="#install-imagemagick-on-mac">Install ImageMagick on Mac</a></li>
+<li><a class="reference internal" href="#install-imagemagick-on-windows">Install ImageMagick on Windows</a></li>
+<li><a class="reference internal" href="#explicitly-link-to-specific-imagemagick">Explicitly link to specific ImageMagick</a></li>
+<li><a class="reference internal" href="#install-wand-on-debian-ubuntu">Install Wand on Debian/Ubuntu</a></li>
+<li><a class="reference internal" href="#install-wand-on-fedora">Install Wand on Fedora</a></li>
+<li><a class="reference internal" href="#install-wand-on-freebsd">Install Wand on FreeBSD</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="http://docs.wand-py.org/en/latest/index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="http://docs.wand-py.org/en/latest/whatsnew/0.4.html" title="previous chapter">What’s new in Wand 0.4?</a></li>
+      <li>Next: <a href="http://docs.wand-py.org/en/latest/guide/read.html" title="next chapter">Reading images</a></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="http://docs.wand-py.org/en/latest/_sources/guide/install.rst.txt" rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input name="q" type="text"></div>
+      <div><input value="Go" type="submit"></div>
+      <input name="check_keywords" value="yes" type="hidden">
+      <input name="area" value="default" type="hidden">
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    © Copyright 2017, Hong Minhee.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  
+<!-- Inserted RTD Footer -->
+<div class="injected">
+
+  
+  <div class="rst-versions rst-badge" data-toggle="rst-versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book">&nbsp;</span>
+      v: latest
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+
+      
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+         <strong> 
+        <dd><a href="http://docs.wand-py.org/en/latest/guide/install.html">latest</a></dd>
+         </strong> 
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/stable/guide/install.html">stable</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.4.4/guide/install.html">0.4.4</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.4.3/guide/install.html">0.4.3</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.4.2/guide/install.html">0.4.2</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.4.1/guide/install.html">0.4.1</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.4.0/guide/install.html">0.4.0</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.9/guide/install.html">0.3.9</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.8/guide/install.html">0.3.8</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.7/guide/install.html">0.3.7</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.6/guide/install.html">0.3.6</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.5/guide/install.html">0.3.5</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.4/guide/install.html">0.3.4</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.3/guide/install.html">0.3.3</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3.0/guide/install.html">0.3.0</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.2.4/guide/install.html">0.2.4</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/sequence/guide/install.html">sequence</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/drawing/guide/install.html">drawing</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.4-maintenance/guide/install.html">0.4-maintenance</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.3-maintenance/guide/install.html">0.3-maintenance</a></dd>
+        
+        
+        
+        <dd><a href="http://docs.wand-py.org/en/0.2-maintenance/guide/install.html">0.2-maintenance</a></dd>
+        
+        
+      </dl>
+      
+      
+
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+        <dd><a href="http://readthedocs.org/projects/wand/downloads/pdf/latest/">PDF</a></dd>
+        
+        <dd><a href="http://readthedocs.org/projects/wand/downloads/htmlzip/latest/">HTML</a></dd>
+        
+        <dd><a href="http://readthedocs.org/projects/wand/downloads/epub/latest/">Epub</a></dd>
+        
+      </dl>
+      
+      
+
+      
+      <dl>
+        <!-- These are kept as relative links for internal installs that are http -->
+        <dt>On Read the Docs</dt>
+        <dd>
+          <a href="http://readthedocs.org/projects/wand/">Project Home</a>
+        </dd>
+        <dd>
+          <a href="http://readthedocs.org/projects/wand/builds/">Builds</a>
+        </dd>
+        <dd>
+          <a href="http://readthedocs.org/projects/wand/downloads/">Downloads</a>
+        </dd>
+      </dl>
+      
+
+      
+
+      
+      <dl>
+        <dt>On GitHub</dt>
+        <dd>
+          <a href="https://github.com/dahlia/wand/blob/master/docs/guide/install.rst">View</a>
+        </dd>
+        <dd>
+          <a href="https://github.com/dahlia/wand/edit/master/docs/guide/install.rst">Edit</a>
+        </dd>
+      </dl>
+      
+      
+
+      
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="//readthedocs.org/projects/wand/search/" method="get">
+              <input name="q" placeholder="Search docs" type="text">
+              </form>
+          </div>
+        </dd>
+      </dl>
+      
+
+
+
+      <hr>
+      
+      Free document hosting provided by <a href="https://readthedocs.org/">Read the Docs</a>. 
+      
+
+      
+    </div>
+  </div>
+  
+
+</div>
+</body></html>
