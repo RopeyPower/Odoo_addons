@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		
+		<record model="ir.ui.view" id="view_mailbox_tree">
+			<field name="name">fetchreply.mailbox.list</field>
+			<field name="model">fetchreply.mailbox</field>
+			<field name="arch" type="xml">
+				<tree string="User Mailboxes">
+					<field name="name"/>
+					<field name="user"/>
+					<field name="imap_is_ssl"/>
+					<field name="date"/>
+					<field name="active"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="view_mailbox_form">
+			<field name="name">fetchreply.mailbox.form</field>
+			<field name="model">fetchreply.mailbox</field>
+			<field name="arch" type="xml">
+				<form string="User Mailbox">
+					<header>
+						<button string="Test &amp; Confirm IMAP" type="object" name="button_test_imap_login" states="draft"/>
+						<button string="Fetch Now" type="object" name="get_reply_emails" states="done"/>
+						<button string="Reset Confirmation" type="object" name="reset_draft" states="done" />
+						<field name="state" widget="statusbar"/>
+					</header>
+					<sheet>
+						<group col="4">
+							<field name="name"/>
+							<field name="date"/>
+							<field name="active"/>
+						</group>
+						<notebook>
+							<page string="Server &amp; Login">
+								<group>
+									<group string="Incoming Server Information">
+										<field name="imap_server" colspan="2" attrs="{'readonly': [('state','!=','draft')], 'required':True}"/>
+										<field name="imap_port" attrs="{'readonly': [('state','!=','draft')], 'required':True}"/>
+										<field name="imap_is_ssl" on_change="onchange_imap_ssl(imap_is_ssl)"/>
+									</group>
+									<group string="Outgoing Server Information">
+										<field name="smtp_server" colspan="2" attrs="{'readonly': [('state','!=','draft')], 'required':True}"/>
+										<field name="smtp_port" attrs="{'readonly': [('state','!=','draft')], 'required':True}"/>
+										<field name="smtp_encryption" on_change="onchange_smtp_encryption(smtp_encryption)"/>
+										<button name="button_test_smtp_login" type="object" string="Test SMTP Connection" icon="gtk-network"/>
+									</group>
+									<group string="Login Information">
+										<field name="user" attrs="{'readonly': [('state','!=','draft')], 'required':True}"/>
+										<field name="password" attrs="{'readonly': [('state','!=','draft')], 'required':True}"/>
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="view_mailbox_search">
+			<field name="name">fetchreply.mailbox.search</field>
+			<field name="model">fetchreply.mailbox</field>
+			<field name="arch" type="xml">
+				<search string="Search user Mailboxes">
+					<field name="name" string="User Mailboxes"/>
+					<field name="user" string="User"/>
+				</search>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="action_mailbox_tree">
+			<field name="name">User Mailboxes</field>
+			<field name="res_model">fetchreply.mailbox</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_mailbox_tree"/>
+			<field name="search_view_id" ref="view_mailbox_search"/>
+		</record>
+		
+		<menuitem
+			parent="base.menu_email"
+			id="menu_action_fetchreply_mailbox_tree"
+			action="action_mailbox_tree"
+			sequence="14"
+			groups="base.group_no_one"
+		/>
+		
+		
+	</data>	
+</openerp>

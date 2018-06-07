@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="ir_cron_mail_gateway_action" model="ir.cron">
+            <field name="name">Fetch Reply Emails Service</field>
+            <field name="interval_number">90</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model">fetchreply.mailbox</field>
+            <field name="function">_get_replies</field>
+            <field name="args">()</field>
+            <!-- Active flag is set on fetchmail_server.create/write -->
+            <field name="active" eval="False"/>
+        </record>
+    </data>
+</openerp>
