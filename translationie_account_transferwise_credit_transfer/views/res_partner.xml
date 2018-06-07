@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<record id="view_partner_transferwise_form" model="ir.ui.view">
+	<field name="name">account_transferwise_credit_transfer.partner_form</field>
+	<field name="model">res.partner</field>
+	<field name="inherit_id" ref="account.view_partner_property_form"/>
+	<field name="arch" type="xml">
+		<field name="debit" position="before">
+			<field name="x_transferwise_payee" invisible="1" />
+			<field name="x_transferwise_recipient_id" attrs="{'invisible':[('x_transferwise_payee','!=',True)]}"/>
+			<field name="x_paypal_payee" invisible="1" />
+			<field name="x_paypal_account" attrs="{'invisible':[('x_paypal_payee','!=',True)]}" />
+			<field name="x_target_currency_code" attrs="{'invisible':['&amp;',('x_transferwise_payee','!=',True),('x_paypal_payee','!=',True)]}"/>
+		</field>
+	</field>
+</record>
+</data>
+</openerp>

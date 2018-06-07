@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="1">
+<record id="transferwise_credit_transfer" model="account.payment.method">
+	<field name="name">Transferwise Credit Transfer to suppliers</field>
+	<field name="code">transferwise_credit_transfer</field>
+	<field name="payment_type">outbound</field>
+	<field name="bank_account_required" eval="False"/>
+</record>
+</data>
+</openerp>
