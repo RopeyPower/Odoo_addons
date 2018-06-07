@@ -1,0 +1,193 @@
+<openerp>
+	<data>	
+		<template id="payment_page" name="Pay">
+			<t t-call="website.layout">
+				<div class="oe_structure">
+					<div class="container">
+						<div style="margin-top: 2%;margin-bottom: 2%;font-size: 16pt;">
+							<p>Welcome <span t-field="document.partner_id.name" /></p>
+							<p>Please review below the details of your order. <strong>Reference: <span t-field="document.name" /></strong></p>
+						</div>
+						<table class="table table-condensed">					
+								<tr>
+									<td style="padding:5px;word-wrap:break-word;">Description</td>
+									<td style="padding:5px;text-align:center;">Source</td>
+									<td style="padding:5px;text-align:center;">Target</td>
+									<td style="padding:5px;text-align:center;">Rate</td>
+									<td style="padding:5px;text-align:center;">Quantity</td>
+									<td style="padding:5px;text-align:center;">VAT</td>
+									<td style="padding:5px;text-align:center;">Subtotal</td>
+								</tr>
+								<tr style="padding:10px;text-align:center;"  t-foreach="document.order_line" t-as="l">
+									<td style="padding:10px;word-wrap:break-word;"><span t-field="l.name"/></td>
+									<td style="padding:10px;word-wrap:break-word;"><span t-field="l.x_source"/></td>
+									<td style="padding:10px;word-wrap:break-word;"><span t-field="l.x_target"/></td>
+									<td style="padding:10px;"><span t-field="l.price_unit" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}'/></td>
+									<td style="padding:10px;"><span t-field="l.product_uom_qty"/></td>
+									<td style="padding:10px;"><span t-field="l.x_vat_amount" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}'/></td>
+									<td style="padding:10px;"><span t-field="l.price_subtotal" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}'/></td>
+								</tr>
+						</table>
+						<div class="row">
+							<div class="col-xs-4 pull-right">
+								<table class="table table-condensed">
+									<tr class="border-black">
+										<td><strong>Total Without Taxes</strong></td>
+										<td class="text-right">
+											<span t-field="document.amount_untaxed"
+												t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+										</td>
+									</tr>
+									<tr>
+										<td>Taxes</td>
+										<td class="text-right">
+											<span t-field="document.amount_tax"
+												t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+										</td>
+									</tr>
+									<tr class="border-black">
+										<td><strong>Total</strong></td>
+										<td class="text-right">
+											<span t-field="document.amount_total"
+												t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+										</td>
+									<tr class="border-black">
+										<td><strong>Amount Due</strong></td>
+										<td class="text-right">
+											<span t-field="document.x_amount_due" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}' />
+										</td>
+									</tr>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div style="margin-left: 40%;margin-top: 20px;">
+							<form name="hpp_post" method="POST"  t-att-action="realex.url">
+							<!--<form name="hpp_post" method="POST" action="https://requestb.in/1doc6r41">-->
+								<input type="hidden" name="TIMESTAMP" t-att-value="hpp_info['timestamp']" />
+								<input type="hidden" name="MERCHANT_ID" t-att-value="realex.merchant_id" />
+								<input type="hidden" name="ACCOUNT" t-att-value="hpp_info['account']" />
+								<input type="hidden" name="ORDER_ID" t-att-value="hpp_info['order_id']" />
+								<input type="hidden" name="AMOUNT" t-att-value="hpp_info['amount']" />
+								<input type="hidden" name="CURRENCY" t-att-value="hpp_info['currency']" />
+								<input type="hidden" name="SHA1HASH" t-att-value="hpp_info['sha1']" />
+								<input type="hidden" name="AUTO_SETTLE_FLAG" t-att-value="hpp_info['auto_settle']" />
+								<input type="hidden" name="COMMENT1" t-att-value="hpp_info['comment']" />
+								<input type="hidden" name="COMMENT2" t-att-value="hpp_info['comment2']" />
+								<input type="hidden" name="VAR_REF" t-att-value="document.project_id.name" />
+								<input type="hidden" name="HPP_VERSION" t-att-value="realex.hpp_version" />
+								<input type="hidden" name="MERCHANT_RESPONSE_URL" t-att-value="realex.response_url" />
+								<button style="width:200px;height:50px;">Proceed to Payment</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</t>
+		</template>
+		
+		<template id="downpayment_page" name="Pay Deposit">
+			<t t-call="website.layout">
+				<div class="oe_structure">
+					<div class="container">
+						<div style="margin-top: 2%;margin-bottom: 2%;font-size: 16pt;">
+							<p>Welcome <span t-field="document.partner_id.name" /></p>
+							<p>Please review below the details of your order. <strong>Reference: <span t-field="document.name" /></strong></p>
+						</div>
+						<table class="table table-condensed">
+							<thead>
+							
+								<tr >
+									<th style="padding:5px;">Description</th>
+									<th style="padding:5px;">Source</th>
+									<th style="padding:5px;">Target</th>
+									<th style="padding:5px;">Rate</th>
+									<th style="padding:5px;">Quantity</th>
+									<th style="padding:5px;">VAT</th>
+									<th style="padding:5px;">Subtotal</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr  t-foreach="document.order_line" t-as="l">
+									<td style="padding:10px;"><span t-field="l.name"/></td>
+									<td style="padding:10px;"><span t-field="l.x_source"/></td>
+									<td style="padding:10px;"><span t-field="l.x_target"/></td>
+									<td style="padding:10px;"><span t-field="l.price_unit" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}'/></td>
+									<td style="padding:10px;"><span t-field="l.product_uom_qty"/></td>
+									<td style="padding:10px;"><span t-field="l.x_vat_amount" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}'/></td>
+									<td style="padding:10px;"><span t-field="l.price_subtotal" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}'/></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="row">
+							<div class="col-xs-4 pull-right">
+								<table class="table table-condensed">
+									<tr class="border-black">
+										<td><strong>Total Without Taxes</strong></td>
+										<td class="text-right">
+											<span t-field="document.amount_untaxed"
+												t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+										</td>
+									</tr>
+									<tr>
+										<td>Taxes</td>
+										<td class="text-right">
+											<span t-field="document.amount_tax"
+												t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+										</td>
+									</tr>
+									<tr class="border-black">
+										<td><strong>Total</strong></td>
+										<td class="text-right">
+											<span t-field="document.amount_total"
+												t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+										</td>
+									<tr class="border-black">
+										<td><strong>Total Amount Due</strong></td>
+										<td class="text-right">
+											<span t-field="document.x_amount_due" t-field-options='{"widget": "monetary", "display_currency": "document.pricelist_id.currency_id"}' />
+										</td>
+									</tr>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div>
+							<p style="font-size: 12pt;">A deposit of 50% is required to commence this project. This comes to <strong><span t-esc="hpp_info['payment_display_amount']" /> <span t-field="document.currency_id.name" /></strong>.  </p>
+						</div>
+						<div style="margin-left: 40%;margin-top: 20px;">
+							<form name="hpp_post" method="POST"  t-att-action="realex.url">
+							<!--<form name="hpp_post" method="POST" action="https://requestb.in/1doc6r41">-->
+								<input type="hidden" name="TIMESTAMP" t-att-value="hpp_info['timestamp']" />
+								<input type="hidden" name="MERCHANT_ID" t-att-value="realex.merchant_id" />
+								<input type="hidden" name="ACCOUNT" t-att-value="hpp_info['account']" />
+								<input type="hidden" name="ORDER_ID" t-att-value="hpp_info['order_id']" />
+								<input type="hidden" name="AMOUNT" t-att-value="hpp_info['amount']" />
+								<input type="hidden" name="CURRENCY" t-att-value="hpp_info['currency']" />
+								<input type="hidden" name="SHA1HASH" t-att-value="hpp_info['sha1']" />
+								<input type="hidden" name="AUTO_SETTLE_FLAG" t-att-value="hpp_info['auto_settle']" />
+								<input type="hidden" name="COMMENT1" t-att-value="hpp_info['comment']" />
+								<input type="hidden" name="COMMENT2" t-att-value="hpp_info['comment2']" />
+								<input type="hidden" name="VAR_REF" t-att-value="document.project_id.name" />
+								<input type="hidden" name="HPP_VERSION" t-att-value="realex.hpp_version" />
+								<input type="hidden" name="MERCHANT_RESPONSE_URL" t-att-value="realex.response_url" />
+								<button style="width:200px;height:50px;">Proceed to Payment</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</t>
+		</template>
+		
+		<template id="not_found" name="Quote not Found">
+			<t t-call="website.layout">
+				<div class="oe_structure">
+					<div class="container" style="font-size:20pt;">
+						<p style="margin-top:5%;">Apologies but we could not find this quote. It may have already been paid for.</p>
+						<p>If you believe you are seeing this message in error or have any other queries, please contact us by email at mail@translation.ie or by phone at 00353 1 652 0760.</p>
+					</div>
+				</div>
+			</t>
+		</template>
+				
+	</data>
+</openerp>

@@ -1,0 +1,12 @@
+<openerp>
+	<data>
+		<template id="validation_error">
+			<t t-call="website.layout">
+				<div class="container">
+					<p>There was an error validating your payment.</p>
+					<p>Please contact us by by phone at 0035316520760 or email at mail@translation.ie to check the status of your payment.</p>
+				</div>
+			</t>
+		</template>
+	</data>
+</openerp>

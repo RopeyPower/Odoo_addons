@@ -1,0 +1,133 @@
+<openerp>
+	<data>
+		<!-- explicit list view definition -->
+		<!--
+		<record model="ir.ui.view" id="translationie_realex_payment_integration.list">
+			<field name="name">translationie_realex_payment_integration list</field>
+			<field name="model">translationie_realex_payment_integration.translationie_realex_payment_integration</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="value"/>
+					<field name="value2"/>
+				</tree>
+			</field>
+		</record>
+		-->
+
+		<!-- actions opening views on models -->
+		<!--
+		<record model="ir.actions.act_window" id="translationie_realex_payment_integration.action_window">
+			<field name="name">translationie_realex_payment_integration window</field>
+			<field name="res_model">translationie_realex_payment_integration.translationie_realex_payment_integration</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		-->
+
+		<!-- server action to the one above -->
+		<!--
+		<record model="ir.actions.server" id="translationie_realex_payment_integration.action_server">
+			<field name="name">translationie_realex_payment_integration server</field>
+			<field name="model_id" ref="model_translationie_realex_payment_integration_translationie_realex_payment_integration"/>
+			<field name="code">
+				action = {
+					"type": "ir.actions.act_window",
+					"view_mode": "tree,form",
+					"res_model": self._name,
+				}
+			</field>
+		</record>
+		-->
+
+		<!-- Top menu item -->
+		<!--
+		<menuitem name="translationie_realex_payment_integration" id="translationie_realex_payment_integration.menu_root"/>
+		-->
+		<!-- menu categories -->
+		<!--
+		<menuitem name="Menu 1" id="translationie_realex_payment_integration.menu_1" parent="translationie_realex_payment_integration.menu_root"/>
+		<menuitem name="Menu 2" id="translationie_realex_payment_integration.menu_2" parent="translationie_realex_payment_integration.menu_root"/>
+		-->
+		<!-- actions -->
+		<!--
+		<menuitem name="List" id="translationie_realex_payment_integration.menu_1_list" parent="translationie_realex_payment_integration.menu_1"
+							action="translationie_realex_payment_integration.action_window"/>
+		<menuitem name="Server to list" id="translationie_realex_payment_integration" parent="translationie_realex_payment_integration.menu_2"
+							action="translationie_realex_payment_integration.action_server"/>
+		-->
+		<!--<record model="ir.ui.view" id="view_realex_tree">
+			<field name="name">custom_payments.realex.list</field>
+			<field name="model">custom_payments.realex</field>
+			<field name="arch" type="xml">
+				<tree string="Realex Configuration">
+					<field name="url" />
+					<field name="merchant_id" />
+					<field name="account" />
+				</tree>
+			</field>
+		</record>-->
+
+		<record model="ir.ui.view" id="view_realex_form">
+			<field name="name">custom_payments.realex.config</field>
+			<field name="model">custom_payments.realex.config</field>
+			<field name="arch" type="xml">
+				<form string="Realex Configuration">
+					<header>
+						<button string="Save" type="object" name="execute" class="oe_highlight"/>
+						<button string="Cancel" type="object" name="cancel" class="oe_link" />
+					</header>
+					<sheet>
+						<group string="HPP Settings">
+							<field name="url"/>
+							<field name="merchant_id" />
+							<field name="response_url"/>
+							<field name="hpp_version" />
+							<group string="Non 3D Secure Account Details" >
+								<field name="account" />
+								<field name="secret"/>
+							</group>
+							<group string="3D Secure Account Details">
+								<field name="account_3d_secure" />
+								<field name="secret_3d_secure" />
+							</group>
+						</group>
+						<group string="Receipt Settings">
+							<field name="company_name" />
+							<field name="company_address" />
+							<field name="company_city" />
+							<field name="company_country" />
+						</group>
+						<group string="Notification Settings">
+							<field name="sender_account" />
+							<field name="receiver_account" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_realex_form">
+			<field name="name">Realex Configuration</field>
+			<field name="res_model">custom_payments.realex.config</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">inline</field>
+		</record>
+		
+		<!--<act_window id="action_realex_form"
+					name="Realex Configuration"
+					res_model="custom_payments.realex.config"
+					view_mode="form"
+					target="current" />-->
+
+
+
+		<menuitem
+			parent="payment.root_payment_menu"
+			id="menu_action_realex_config_tree"
+			action="action_realex_form"
+			sequence="20"
+			groups="translationie_realex_payment_integration.group_user"
+		/>
+	</data>
+</openerp>

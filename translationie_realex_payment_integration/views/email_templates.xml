@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<record id="realex_customer_notification_email_template" model="mail.template">
+			<field name="name">Realex Customer Notification e-mail template</field>
+			<field name="email_from">${object.realex_settings.sender_account.user}</field>
+			<field name="subject">${object.company.name} Order Ref ${object.order_document.name} Payment Successful</field>
+			<field name="email_to">${object.order_document.partner_id.email}</field>
+			<field name="model_id" ref="translationie_realex_payment_integration.model_custom_payments_realex_notification"/>
+			<field name="auto_delete" eval="False" />
+			<field name="body_html">
+				<![CDATA[
+					<p>Dear ${(object.order_document.partner_id.name)},</p>
+					<p>Your payment for Order Reference: ${(object.order_document.name)} has been successful.</p>
+					<p>Please find a copy of your receipt attached to this email.</p>
+					<p>If you have any further enquiries don't hesitate to contact us.</p>
+					<p>Regards,</p>
+					<p>${(object.realex_settings.sender_account.name)}</p>
+				]]>
+			</field>
+		</record>
+		
+		<record id="realex_pm_notification_email_template" model="mail.template">
+			<field name="name">Realex Project Manager Notification e-mail template</field>
+			<field name="email_from">${object.realex_settings.sender_account.user}</field>
+			<field name="subject">${object.company.name} Order Ref ${object.order_document.name} Payment Successful</field>
+			<field name="email_to">${object.realex_settings.sender_account.user}, ${object.order_document.user_id.login}</field>
+			<field name="model_id" ref="translationie_realex_payment_integration.model_custom_payments_realex_notification"/>
+			<field name="auto_delete" eval="False" />
+			<field name="body_html">
+				<![CDATA[
+					<p>Customer ${(object.order_document.partner_id.name)} has paid for Project <strong>${(object.order_document.name)}</strong>.</p>
+					<p>The realex transaction has order id: ${(object.order_id)}.</p>
+					<p>In Odoo the sale order has been confirmed, an invoice generated and the amount paid registered against the invoice.</p>
+					<p>The next step is to assign translators to the tasks that have been created in Odoo automatically.</p>
+					<p>You can follow this link <a href="${(object.project_link)}">${(object.project_link)}</a> to log into Odoo and manage the project.</p>
+				]]>
+			</field>
+		</record>
+		
+		<record id="realex_account_deactivated_notification_email_template" model="mail.template">
+			<field name="name">Realex Account De-activated Notification e-mail template</field>
+			<field name="email_from">${object.realex_settings.sender_account.user}</field>
+			<field name="subject">Our Realex Account has been de-activated</field>
+			<field name="model_id" ref="translationie_realex_payment_integration.model_custom_payments_realex_notification"/>
+			<field name="auto_delete" eval="False" />
+			<field name="body_html">
+				<![CDATA[
+					<p>An attempted Credit Card payment in Odoo received the response that our Realex Account has been suspended</p>
+					<p>Please contact Realex Payments to resolve this issue. No Credit Card payments will be successfully processed until this issue is resolved</p>
+				]]>
+			</field>
+		</record>
+		
+		<record id="realex_quote_full_payment_email_template" model="mail.template">
+			<field name="name">Send Quote with full payment realex link</field>
+			<field name="email_from">${(object.user_id.email and '%s &lt;%s&gt;' % (object.user_id.name, object.user_id.email) or '')|safe}</field>
+			<field name="subject">${object.company_id.name} ${object.state in ('draft', 'sent') and 'Quotation' or 'Order'} (Ref ${object.name or 'n/a' })</field>
+			<field name="use_default_to" eval="True" />
+			<!--<field name="email_to">${object.partner_id.email}</field>-->
+			<!--<field name="partner_to">${object.partner_invoice_id.id}</field>-->
+			<field name="model_id" ref="sale.model_sale_order"/>
+			<field name="report_template" ref="sale.report_sale_order"/>
+			<field name="report_name">${(object.name or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>
+			<field name="auto_delete" eval="False" />
+			<field name="lang">${object.partner_id.lang}</field>
+			<field name="body_html">
+				<![CDATA[
+					<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+						<p>Hello ${object.partner_id.name},</p>
+						
+						<p>Here is your ${object.state in ('draft', 'sent') and 'quotation' or 'order confirmation'} from ${object.company_id.name}: </p>
+
+						<p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+						   &nbsp;&nbsp;<strong>REFERENCES</strong><br />
+						   &nbsp;&nbsp;Order number: <strong>${object.name}</strong><br />
+						   &nbsp;&nbsp;Order total: <strong>${object.amount_total} ${object.pricelist_id.currency_id.name}</strong><br />
+						   &nbsp;&nbsp;Amount Due: <strong>${object.x_amount_due} ${object.pricelist_id.currency_id.name}</strong><br />
+						   &nbsp;&nbsp;Order date:  ${format_tz(object.date_order, tz=user.tz, context={'lang':object.partner_id.lang})} <br />
+						   % if object.origin:
+						   &nbsp;&nbsp;Order reference: ${object.origin}<br />
+						   % endif
+						   % if object.client_order_ref:
+						   &nbsp;&nbsp;Your reference: ${object.client_order_ref}<br />
+						   % endif
+						   % if object.user_id:
+						   &nbsp;&nbsp;Your contact: <a href="mailto:${object.user_id.email or ''}?subject=Order%20${object.name}">${object.user_id.name}</a>
+						   % endif
+						</p>
+						
+						% if object.state not in ('done', 'cancel'):
+							<p>It is possible to pay directly with credit card:</p>
+							 <a style="margin-left: 120px;" href="${object.x_payment_url}">
+								<span style="padding: 2px 6px 2px 6px;border: 1px solid black;background-color: #f9f9f9;color: black;">Pay here</span>
+							</a>
+						% endif
+						
+						<br/>
+						<p>If you have any question, do not hesitate to contact us.</p>
+						<p>Thank you for choosing ${object.company_id.name or 'us'}!</p>
+						<br/>
+						<br/>
+						<div style="width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+							<h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;">
+								<strong style="text-transform:uppercase;">${object.company_id.name}</strong></h3>
+						</div>
+						<div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+							<span style="color: #222; margin-bottom: 5px; display: block; ">
+								${object.company_id.partner_id.sudo().with_context(show_address=True, html_format=True).name_get()[0][1] | safe}
+							</span>
+							% if object.company_id.phone:
+								<div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+									Phone:&nbsp; ${object.company_id.phone}
+								</div>
+							% endif
+							% if object.company_id.website:
+								<div>
+									Web :&nbsp;<a href="${object.company_id.website}">${object.company_id.website}</a>
+								</div>
+							%endif
+							<p></p>
+						</div>
+					</div>
+				]]>
+			</field>
+		</record>
+		
+		<record id="realex_quote_deposit_email_template" model="mail.template">
+			<field name="name">Send Quote with deposit realex link</field>
+			<field name="email_from">${(object.user_id.email and '%s &lt;%s&gt;' % (object.user_id.name, object.user_id.email) or '')|safe}</field>
+			<field name="subject">${object.company_id.name} ${object.state in ('draft', 'sent') and 'Quotation' or 'Order'} (Ref ${object.name or 'n/a' })</field>
+			<field name="use_default_to" eval="True" />
+			<field name="model_id" ref="sale.model_sale_order"/>
+			<field name="report_template" ref="sale.report_sale_order"/>
+			<field name="report_name">${(object.name or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>
+			<field name="auto_delete" eval="False" />
+			<field name="lang">${object.partner_id.lang}</field>
+			<field name="body_html">
+				<![CDATA[
+					<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+						<p>Hello ${object.partner_id.name},</p>
+						
+						<p>Here is your ${object.state in ('draft', 'sent') and 'quotation' or 'order confirmation'} from ${object.company_id.name}: </p>
+
+						<p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+						   &nbsp;&nbsp;<strong>REFERENCES</strong><br />
+						   &nbsp;&nbsp;Order number: <strong>${object.name}</strong><br />
+						   &nbsp;&nbsp;Order total: <strong>${object.amount_total} ${object.pricelist_id.currency_id.name}</strong><br />
+						   &nbsp;&nbsp;Total Amount Due: <strong>${object.x_amount_due} ${object.pricelist_id.currency_id.name}</strong><br />
+						   &nbsp;&nbsp;Order date:  ${format_tz(object.date_order, tz=user.tz, context={'lang':object.partner_id.lang})} <br />
+						   % if object.origin:
+						   &nbsp;&nbsp;Order reference: ${object.origin}<br />
+						   % endif
+						   % if object.client_order_ref:
+						   &nbsp;&nbsp;Your reference: ${object.client_order_ref}<br />
+						   % endif
+						   % if object.user_id:
+						   &nbsp;&nbsp;Your contact: <a href="mailto:${object.user_id.email or ''}?subject=Order%20${object.name}">${object.user_id.name}</a>
+						   % endif
+						</p>
+						
+						% if object.state not in ('done', 'cancel') and object.x_deposit_allowed:
+							<p>For this project to proceed an advance payment of 50% is required. You can click the below link to pay:</p>
+							 <a style="margin-left: 120px;" href="${object.x_deposit_url}">
+								<span style="padding: 2px 6px 2px 6px;border: 1px solid black;background-color: #f9f9f9;color: black;">Pay here</span>
+							</a>
+						% endif
+						
+						<br/>
+						<p>If you have any question, do not hesitate to contact us.</p>
+						<p>Thank you for choosing ${object.company_id.name or 'us'}!</p>
+						<br/>
+						<br/>
+						<div style="width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+							<h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;">
+								<strong style="text-transform:uppercase;">${object.company_id.name}</strong></h3>
+						</div>
+						<div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+							<span style="color: #222; margin-bottom: 5px; display: block; ">
+								${object.company_id.partner_id.sudo().with_context(show_address=True, html_format=True).name_get()[0][1] | safe}
+							</span>
+							% if object.company_id.phone:
+								<div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+									Phone:&nbsp; ${object.company_id.phone}
+								</div>
+							% endif
+							% if object.company_id.website:
+								<div>
+									Web :&nbsp;<a href="${object.company_id.website}">${object.company_id.website}</a>
+								</div>
+							%endif
+							<p></p>
+						</div>
+					</div>
+				]]>
+			</field>
+		</record>
+	</data>
+</odoo>

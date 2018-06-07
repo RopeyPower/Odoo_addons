@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="ir_cron_daily_credit_card_batch_action" model="ir.cron">
+			<field name="name">Close Daily Credit Card Batch</field>
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="numbercall">-1</field>
+			<field name="doall" eval="True" />
+			<!--<field name="nextcall" >2017-10-23 23:59:59</field>-->
+			<field name="model">custom_payments.realex.statement</field>
+			<field name="function">_close_daily_batch</field>
+			<field name="active" eval="True" />
+		</record>
+	</data>
+</openerp>

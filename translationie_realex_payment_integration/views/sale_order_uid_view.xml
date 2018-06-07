@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="sale_order_uid_form" model="ir.ui.view">
+			<field name="name">sale.order.uid.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_cancel']" position="after">
+					<button name="button_pay_by_card" type="object" string="Pay by Card" attrs="{'invisible':[('x_fully_paid','=',True)]}"/>
+					<button name="button_pay_deposit" type="object" string="Pay Deposit by Card" attrs="{'invisible':[('x_deposit_allowed','=',False)]}" />
+				</xpath>
+				<xpath expr="//field[@name='project_id']" position="after">
+					<field name="x_order_uid" />
+					<field name="x_realex_sha1" invisible="1" />
+					<field name="x_fully_paid" />
+					<field name="x_amount_due" />
+					<field name="x_deposit_allowed" invisible="1" />
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

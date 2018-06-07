@@ -1,0 +1,39 @@
+<openerp>
+	<data>	
+		<template id="confirmation_page" name="Payment Success">
+			<t t-call="website.layout">
+				<div class="oe_structure">
+					<div class="container">
+						<div style="text-align: center;margin-top: 3%;font-size: 14pt;">
+							<p>Payment for <strong>Order Reference: <span t-field="document.name" /></strong> has been successful.</p>
+							<p>Please see receipt below:</p>
+						</div>
+						<div t-raw="document.x_receipt_svg" style="margin:auto;width:40%;" />
+						<div style="text-align: center;margin-top: 3%;font-size: 12pt;">
+							<p>Thank you for you custom.</p>
+							<p>If you have any enquiries please do not hesitate to contact us by email at <a href="mailto:mail@translation.ie">mail@translation.ie</a> or by phone on <strong>00353 1 652 0760</strong>.</p>
+						</div>
+					</div>
+				</div>
+			</t>
+		</template>
+		
+		<template id="failure_page" name="Payment Failure" >
+			<t t-call="website.layout" >
+				<div class="oe_structure">
+					<div class="container">
+						<div style="margin-top: 3%;font-size: 14pt;">
+							<p>Apologies <span t-field="document.partner_id.name" />,</p>
+							<div style="text-align: center;">
+								<p t-foreach="failure_message" t-as="line">
+									<span t-raw="line" />
+								</p>
+							</div>
+							<div t-raw="document.x_receipt_svg" style="margin:auto;width:40%;" />
+						</div>
+					</div>
+				</div>
+			</t>
+		</template>
+	</data>
+</openerp>

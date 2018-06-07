@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="view_realex_statement_form">
+			<field name="name">custom_payments.realex.statement.form</field>
+			<field name="model">custom_payments.realex.statement</field>
+			<field name="arch" type="xml">
+				<form string="Realex Statement">
+					<header>
+						<field name="batch_state" widget="statusbar"/>
+					</header>
+					<sheet>
+						<group>
+							<field name="name" string="Statement Name" attrs="{'readonly':[('batch_state','=','close')]}" />
+							<field name="batch_date" string="Statement Date" attrs="{'readonly':[('batch_state','=','close')]}" />
+						</group>
+						<field name="batch_payments" attrs="{'readonly':[('batch_state','=','close')]}"/>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="view_realex_statemenet_tree">
+			<field name="name">custom_payments.realex.statement.tree</field>
+			<field name="model">custom_payments.realex.statement</field>
+			<field name="arch" type="xml">
+				<tree string="Realex Batches">
+					<field name="name"/>
+					<field name="batch_date" />
+					<field name="batch_state" />
+				</tree>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="action_realex_statement_tree">
+			<field name="name">Realex Statements</field>
+			<field name="res_model">custom_payments.realex.statement</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+		</record>
+			
+		<menuitem
+			parent="payment.root_payment_menu"
+			id="menu_action_realex_statement_tree"
+			action="action_realex_statement_tree"
+			sequence="30"
+			groups="translationie_realex_payment_integration.group_user"
+		/>
+		
+	</data>
+</openerp>
