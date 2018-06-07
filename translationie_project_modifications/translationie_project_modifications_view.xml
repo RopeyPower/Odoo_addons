@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="project_task_mod_form" model="ir.ui.view">
+			<field name="name">project.task.modification.form</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_form2" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='stage_id']" position="before">
+					<button string="Assign Translator" type="object" name="assign_translator" attrs="{'invisible':[('x_status','!=','draft')]}" />
+					<button string="Unassign Translator" type="object" name="unassign_translator" attrs="{'invisible':[('x_status','!=','open')]}" />
+					<button string="Task Completed" type="object" name="mark_complete" attrs="{'invisible':[('x_status','!=','open')]}" />
+					<button string="Re-open" type="object" name="re_open" attrs="{'invisible':[('x_status','!=','complete')]}" />
+					<!--<button string="Create PO" type="object" name="button_create_po" attrs="{'invisible':['|',('x_status','=','draft'),('x_purchase_order','!=',False)]}" />-->
+					<button string="Create PO" type="object" name="button_create_po" attrs="{'invisible':[('x_purchase_order','!=',False)]}" />
+				</xpath>
+				<xpath expr="//field[@name='stage_id']" position="replace">
+					<field name="stage_id" invisible="1" />
+				</xpath>
+				<xpath expr="//field[@name='stage_id']" position="after">
+					<field name="x_status" widget="statusbar"/>
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="after">
+					<field name="x_translator"  attrs="{'readonly':[('x_status','!=','draft')]}" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}" domain="[('supplier','=',True)]" />
+					<field name="x_words" />
+				</xpath>
+				<xpath expr="//field[@name='tag_ids']" position="after">
+					<field name="x_purchase_order"/>
+					<field name="x_source" />
+					<field name="x_target" />
+				</xpath>
+				<xpath expr="//field[@name='sequence']" position="after" >
+					<field name="x_product" />
+				</xpath>
+				<xpath expr="//field[@name='date_deadline']" position="replace">
+					<field name="date_deadline" />
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="project_task_mod_tree" model="ir.ui.view">
+			<field name="name">project.task.modification.tree</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_tree2" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='project_id']" position="after">
+					<field name="x_source" />
+					<field name="x_target" />
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="replace">
+					<field name="x_translator" />
+					<field name="date_deadline" />
+				</xpath>
+				<xpath expr="//field[@name='stage_id']" position="replace">
+					<field name="x_status" bg_color="pink:x_status=='draft';yellow:x_status=='open';orange:x_status=='complete';green:x_status=='close'"/>
+				</xpath>
+				<xpath expr="//field[@name='x_status']" position="attributes">
+					<attribute name="fg_color">black:x_status=='draft';black:x_status=='open';black:x_status=='complete';white:x_status=='close'</attribute>
+				</xpath>
+				<xpath expr="//field[@name='progress']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='date_deadline']" position="attributes">
+					<attribute name="bg_color">red:date_deadline&lt;current_date and (x_status=='draft' or x_status=='open')</attribute>
+					<attribute name="fg_color">white:date_deadline&lt;current_date and (x_status=='draft' or x_status=='open')ovulation</attribute>
+				</xpath>
+				<xpath expr="//tree" position="attributes">
+					<attribute name="decoration-danger"></attribute>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="project_task_mod_search" model="ir.ui.view">
+			<field name="name">project.task.modification.search</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_search_form"/>
+			<field name="arch" type="xml">
+				<field name="stage_id" position="after">
+					<field name="x_source" string="Source Language"/>
+					<field name="x_target" string="Target Language"/>
+					<field name="x_translator" string="Translator"/>
+				</field>
+				<xpath expr="//group" position="inside">
+					<filter string="Translator" context="{'group_by': 'x_translator'}"/>
+				</xpath>
+				<xpath expr="//filter[@name='unassigned']" position="after">
+					<separator/>
+					<filter string="In Progress" name="task_in_progress" domain="[('x_status','=','open')]"/>
+					<filter string="Un-Assigned" name="task_un-assigned" domain="[('x_status','=','draft')]"/>
+					<filter string="Completed By Linguist" name="task_completed_by_linguist" domain="[('x_status','=','complete')]"/>
+					<filter string="Closed" name="task_closed" domain="[('x_status','=','close')]"/>
+					<separator/>
+					<filter string="In Progress" name="project_in_progress" domain="[('x_project_status','=','open')]"/>
+					<filter string="Cancelled" name="project_cancelled" domain="[('x_project_status','=','cancelled')]"/>
+					<filter string="Pending" name="project_pending" domain="[('x_project_status','=','pending')]"/>
+					<filter string="Closed" name="project_closed" domain="[('x_project_status','=','close')]"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="project_project_mod_form" model="ir.ui.view">
+			<field name="name">project.project.modification.form</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.edit_project" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='state']" position="before">
+					<button string="Cancel Project" type="object" name="button_cancel_project"  attrs="{'invisible':[('state','in',['close','cancelled'])]}" />
+					<button string="Reopen Project" type="object" name="button_reopen_project" attrs="{'invisible':[('state','!=','cancelled')]}" />
+					<button string="View Sale Order" type="object" name="button_view_so" />
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="after">
+					<group>
+						<field name="x_project_deadline" />
+						<field name="x_source_langs" widget="many2many_tags" />
+						<field name="x_target_langs" widget="many2many_tags" />
+					</group>
+					<group>
+						<field name="x_description" />
+						<field name="x_comment" />
+					</group>
+				</xpath>
+				<xpath expr="//notebook//page" position="after" >
+					<page string="Translators">
+						<group string="Translator Details">
+							<field name="x_translators" widget="many2many_tags"/>
+							<field name="x_translators_deadline" />
+						</group>
+						<group string="Reviewer Details">
+							<field name="x_reviewers" widget="many2many_tags"/>
+							<field name="x_reviewers_deadline" />
+						</group>
+					</page>
+				</xpath>
+				<xpath expr="//field[@name='state']" position="attributes">
+					<attribute name="clickable"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="project_project_mod_list" model="ir.ui.view">
+			<field name="name">project.project.modification.tree</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.view_project" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='user_id']" position="after">
+					<field name="x_description"/>
+					<field name="x_comment" />
+				</xpath>
+				<xpath expr="//field[@name='partner_id']" position="after">
+					<field name="x_source_langs" />
+					<field name="x_target_langs" />
+					<field name="x_translators" />
+					<field name="x_translators_deadline" />
+					<field name="x_reviewers" />
+					<field name="x_reviewers_deadline" />
+					<field name="x_project_deadline" />
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="project_project_mod_filter"  model="ir.ui.view">
+			<field name="name">project.project.modification.select</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.view_project_project_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='name']" position="after">
+					<field name="x_source_langs" string="Source Language" domain="[('x_source_langs','>',0)]"/>
+					<field name="x_target_langs" string="Target Language" />
+				</xpath>
+				<xpath expr="//filter[@name='Current']" position="after">
+					<filter string="New" name="new" domain="[('state','=','draft')]" />
+					<filter string="In Progress" name="went_ahead" domain="[('tasks','>',0),('state','=','open')]"/>
+					<filter string="Closed" name="closed" domain="[('state','=','close')]" />
+					<filter string="Cancelled" name="cancelled" domain="[('state','=','cancelled')]" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="project.action_view_task" model="ir.actions.act_window">
+			<field name="name">Tasks</field>
+			<field name="res_model">project.task</field>
+			<field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+			<field name="context">{'search_default_project_in_progress':1, 'search_default_project':1}</field>
+			<field name="auto_search" eval="True"/>
+			<field name="search_view_id" ref="project.view_task_search_form"/>
+			<field name="help" type="html">
+				<p>
+					Odoo's project management allows you to manage the pipeline of your tasks efficiently. You can track progress, discuss on tasks, attach documents, etc.
+				</p>
+			</field>
+		</record>
+		<record id="project.open_view_task_list_kanban" model="ir.actions.act_window.view">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">kanban</field>
+			<field name="act_window_id" ref="project.action_view_task"/>
+		</record>
+		<record id="project.open_view_task_list_tree" model="ir.actions.act_window.view">
+			<field name="sequence" eval="0"/>
+			<field name="view_mode">tree</field>
+			<field name="act_window_id" ref="project.action_view_task"/>
+		</record>
+				
+		<record id="project.open_view_project_all" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_Current': 0, 'search_default_went_ahead': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new project.
+                </p><p>
+                    Organize your activities (plan tasks, track issues, invoice timesheets) for internal, personal or customer projects.
+                </p>
+            </field>
+        </record>
+
+		<record id="project.open_view_task_list_kanban_mod" model="ir.actions.act_window.view">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">kanban</field>
+			<field name="act_window_id" ref="project.act_project_project_2_project_task_all"/>
+		</record>
+		<record id="project.open_view_task_list_tree_mod" model="ir.actions.act_window.view">
+			<field name="sequence" eval="0"/>
+			<field name="view_mode">tree</field>
+			<field name="act_window_id" ref="project.act_project_project_2_project_task_all"/>
+		</record>
+		
+		<!--<record id="action_automatic_set_task" model="ir,actions.server">
+			<field name="name">Automatically set task states</field>
+			<field name="condition">True</field>
+			<field name="type">ir.actions.server</field>
+			<field name="model" ref="model_project_project" />
+			<field name="state">code</field>
+			<field name="code">self.automatic_set_task_state(self)</field>
+		</record>
+		
+		<record model="ir.values" id="ir_values_automatic_set_task">
+			<field name="model_id" ref="project"/>
+		</record>-->
+		
+	</data>
+</openerp>

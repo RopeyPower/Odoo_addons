@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="view_project_task_mark_complete" model="ir.ui.view">
+			<field name="name">Mark Multiple Tasks Complete</field>
+			<field name="model">project.task.status.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Mark Tasks Complete">
+					<p class="oe_grey">
+						Selected tasks whose status is "In Progress" will have their status moved to complete.
+					</p>
+					<footer>
+						<button name="mark_complete_multiple" string="Mark tasks complete" type="object" class="btn-primary" />
+						<button string="Cancel" class="btn-default" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<act_window id="mark_task_complete_wizard"
+					name="Mark Multiple Tasks Complete"
+					src_model="project.task"
+					res_model="project.task.status.wizard"
+					view_mode="form"
+					target="new"
+					key2="client_action_multi" />
+					
+	</data>
+</openerp>
