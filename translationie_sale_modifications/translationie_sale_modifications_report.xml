@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+	
+		<report 
+            id="report_sale_order"
+            string="Quotation / Order"
+            model="sale.order" 
+            report_type="qweb-pdf"
+            file="sale.report_saleorder" 
+            name="sale.report_saleorder" 
+        />
+	
+		<template id="translationie_sale_mod_report" inherit_id="sale.report_saleorder_document">
+			<xpath expr="//div[@class='page']" position="replace">
+				<t t-if="not doc.partner_id.is_company and not doc.partner_id.parent_id.is_company">
+					<t t-call="translationie_sale_modifications.translationie_sale_mod_report_standard" />
+				</t>
+				<t t-if="not doc.partner_id.is_company and doc.partner_id.parent_id.is_company" >
+					<t t-call="translationie_sale_modifications.translation_sale_mod_report_business" />
+				</t>
+				<t t-if="doc.partner_id.is_company">
+					<t t-call="translationie_sale_modifications.translation_sale_mod_report_business" />
+				</t>
+			</xpath>
+		</template>
+		
+		
+		<!-- STANDARD QUOTE -->
+		<template id="translationie_sale_modifications.translationie_sale_mod_report_standard">
+			<div class="page" style="font-size:11pt;">
+				<div style="text-align:center;font-weight:bold;">
+					<p style="font-size:16pt;">Translation Quotation</p>
+					<p style="font-size:14pt;">Reference: <span t-field="doc.name"/></p>
+				</div>
+				<p>Dear <strong><span t-field="doc.partner_id.name" /></strong>,</p>
+				<p>Thank you very much for your enquiry regarding our translation services.</p>
+				<p>Following your quotation request, we are pleased to quote <strong><span t-field="doc.x_total_translation_cost_untaxed" /> + <span t-field="doc.amount_tax" /> VAT@23%</strong> for translating your document from <strong><span t-field="doc.x_languages_fragment" /></strong>.</p>
+				<p> Please find below an estimated cost: </p>
+				<table style="margin-top:10px" class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Description</th>
+							<th>Source</th>
+							<th>Target</th>
+							<th class="text-right">Rate</th>
+							<th class="text-right">Quantity</th>
+							<th class="text-right">VAT</th>
+							<th class="text-right">Sub-total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr t-foreach="doc.order_line" t-as="l">
+							<td>
+								<span t-field="l.name"/>
+							</td>
+							<td>
+								<span t-field="l.x_source" />
+							</td>
+							<td>
+								<span t-field="l.x_target" />
+							</td>
+							<td class="text-right">
+								<!--<span t-field="l.price_unit" t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}' />-->
+								<span t-esc="'%.3f'%(l.price_unit)"/>
+							</td>
+							<td class="text-right">
+								<span t-field="l.product_uom_qty" />
+							</td>
+							<td class="text-right">
+								<span t-field="l.x_vat_amount" />
+							</td>
+							<td class="text-right">
+								<span t-field="l.price_subtotal" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				 
+				 <div class="row">
+					<div class="col-xs-4 pull-right">
+						<table class="table table-condensed">
+							<tr class="border-black">
+								<td><strong>Total Without Taxes</strong></td>
+								<td class="text-right">
+									<span t-field="doc.amount_untaxed"
+										t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+								</td>
+							</tr>
+							<tr>
+								<td>Taxes</td>
+								<td class="text-right">
+									<span t-field="doc.amount_tax"
+										t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+								</td>
+							</tr>
+							<tr class="border-black">
+								<td><strong>Total</strong></td>
+								<td class="text-right">
+									<span t-field="doc.amount_total"
+										t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div>
+					<p>The rate includes <strong><span t-field="doc.x_biz_service" /></strong> of your document.</p>
+					<p>Please allow <strong><span t-field="doc.x_timeframe_days"/> working days</strong> to produce, check and certify your translation.</p>
+					<p>In order for us to process your translation request, <span style="font-weight:bold;color:red">advanced payment</span> is required.</p>
+					<p>Our methods of payment are as follows:</p>
+					<p>We accept payment by credit card, bank transfer, or contact <a href="https://www.skrill.com/en/">www.skrill.com</a> or <a href="http://www.paypal.com">www.paypal.ie</a> to <a href="mailto:accounts@translation.ie">accounts@translation.ie</a></p>
+				</div>
+				<div>
+					<table>
+						<tr>
+							<td colspan="3">For the purpose of a bank transfer, please find the details below:</td>
+						</tr>
+						<tr>
+							<td>Name:</td>
+							<td>Translation.ie</td>
+						</tr>
+						<tr>
+							<td>Branch:</td>
+							<td>Bank of Ireland Ballsbridge, Dublin 4</td>
+						</tr>
+						<tr>
+							<td>Sort code:</td>
+							<td>900973</td>
+							<td>BIC: BOFIIE2D</td>
+						</tr>
+						<tr>
+							<td style="padding-right:8px">Account no:</td>
+							<td>91055719</td>
+							<td>IBAN: IE86 BOFI 9009 7391 0557 19</td>
+						</tr>
+					</table>
+				</div>
+				<div>
+					<br/>
+					<p style="font-weight:bold;color:red;">Please use quotation reference number when making a bank transfer or ePayment.</p>
+					<p>Alternatively, please contact us to make arrangements for collection / delivery / payment at 01 6520760 or <a href="http://www.translation.ie/contactus.html">www.translation.ie/contactus.html</a><br/>
+					For directions to our office; <a href="https://goo.gl/maps/qh4zEP2KaRT2">MAP</a></p>
+					<p><strong>Opening hours</strong>: Our office opens from 9am to 6.00pm Monday to Thursday, and 5.00pm on Friday.</p>
+				</div>
+				<div style="page-break-after:always;">
+					<table>
+						<tr>
+							<td>With thanks,</td>
+						</tr>
+						<tr>
+							<td>
+								<span t-field="doc.user_id.name" style="font-weight:bold"/>
+							</td>
+						</tr>
+						<tr>
+							<td>Project Manager</td>
+						</tr>
+						<tr>
+							<td>
+								<span t-field="doc.user_id.email" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span t-field="doc.user_id.phone" />
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div style="page-break-after:always;font-size:7.5pt;font-kerning:auto;">
+					<h3>Terms and Conditions of Service</h3>
+					<p style="text-weight:bold;text-decoration:underline;">Definitions:</p>
+					<p>For the purpose of these Terms and Conditions "the Company", "we", "our" or "us" refers to Translation.ie(company no. 290402 whose registered office is at 46 Mount Street Upper, Dublin 2
+					and “Client” or “you” represents the company, firm, body, organisation, or person contracting Translation.ie to undertake service(s) on its behalf.<br/>
+					“Agreement” is defined as the agreement between the Client and the Company governed by the Terms and Conditions of service.<br/>
+					“Terms and Conditions” means these standard Terms and Conditions as set out below.<br/>
+					“Order” means a confirmed request by you for our Services.<br/>
+					“Services” means translation services performed by us for you.<br/>
+					“Work materials” means any information communicated or transmitted to us by you in order to perform the Services provided herein.<br/>
+					“Confidential Information” means information (in any form) which is confidential either to you or to us and which either you disclose to us or we disclose to you in connection with the Services.
+					</p>
+					<p>In submitting an Order, the Client enters into a binding Agreement with the Company, covered by the following Terms and Conditions:</p>
+					<p>1. APPLICATION<br/>
+					No conditions other than those set out herein nor any variation thereof shall be binding on the Company unless otherwise specifically agreed in writing by an officer of the Company. 
+					These conditions shall be incorporated in every quotation, acceptance and contract for work by us subject to the foregoing; any conditions proposed by the Client are hereby excluded.
+					</p>
+					<p>2. INTENDED USE OF TRANSLATION SERVICES<br/>
+					2.1. The Client shall clearly indicate in writing the intended use of the translation.<br/>
+					2.2. Unless otherwise requested in writing a translation is undertaken for information and understanding only, which is of a high enough standard for use in general correspondence.<br/>
+					2.3. If requested in writing, the translation may be the final document which will not be further edited by the Client or other-related third parties.
+					</p>
+					<p>3. QUOTATIONS<br/>
+					3.1. Quotations are not binding on the Company and are given subject to confirmation by the Company upon receipt of the Client’s order. No Agreement shall be concluded until such confirmation is given. Written quotations remain valid for 30 days after despatch and thereafter will lapse unless otherwise stated in writing.<br/>
+					3.2. Quotations are given on the basis of the Client’s description of the source material, the purpose of the translation and any other instructions. Such quotations may be amended at any time if, in our opinion, the description of the source materials is materially inadequate or inaccurate
+					</p>
+					<p>4. PAYMENT<br/>
+					4.1. Unless otherwise stated, prices are in euro and are exclusive of value added tax. We shall invoice you for all appropriate taxes and expenses for which we are liable to collect. You shall be liable to pay any penalties or interest on such taxes which are payable by us as a result of your delay in paying such charges.<br/>
+					4.2. Payment is requested by direct bank transfer or by credit card via direct contact with our office unless otherwise specified in writing on the invoice. All payments shall be made without deduction or set-off of bank charges.<br/>
+					4.3. Normal payment terms are 50% payment on confirmation of order and 50% on the date the translation is to be released.<br/>
+					4.4. Where credit accounts are approved and opened for a Client, payment must be received within 30 days of the date on which the invoice is issued unless specifically agreed in writing by an officer of the Company.<br/>
+					4.5. Quotations in a currency other than euro are based on the rate of exchange at the time of quoting and, unless otherwise stated, the price is subject to exchange rate fluctuations at the date of invoice.<br/>
+					4.6. Failure to pay any invoice in accordance with these Terms and Conditions or any others specified in writing at the time, shall entitle us to suspend further work both on the same order, and on any other order from you, without prejudice to any other right we may have.
+					</p>
+					<p>5. COMPLETION OF WORK<br/>
+					5.1. A date agreed by the Company for delivery is given and intended as an estimate only. The Company will make every endeavour to meet such an estimated date but shall not be liable to make good any damage or loss, whether arising directly or indirectly out of its failure to meet such estimated date. Whilst we shall make every reasonable effort to meet the Client’s requirements, late delivery shall not entitle the Client to withhold payment for Services provided.<br/>
+					5.2. The Client and the Company may, at any time after such date, in regard to the original anticipated delivery period, agree a further date for delivery, and if delivery has not taken place by such a date, no charge will be made and the Contract will be considered cancelled.<br/>
+					5.3. The Company reserves the right to sub-contract all or part of the work to an approved contractor(s) of its choice. We will not be liable in any circumstances for the consequences of failure to deliver or perform if the delay or failure is due to the non-delivery or non-performance by its sub-contractors.
+					</p>
+					<p>6. CANCELLATION AND SUSPENSION<br/>
+					6.1. If the Client for any reason cancels work which has been commissioned, charges will be payable for all the completed work up to the cancellation date and for all other costs and expenses which may accrue as a result of such cancellation.<br/>
+					6.2. If the Client suspends or postpones work commissioned for a period of 21 days or more, charges will be payable for all commissioned work up to the date of suspension or postponement and for all other cost and expenses which may accrue as a result of such suspension.
+					</p>
+					<p>7. LIABILITY<br/>
+					7.1. The Company shall be relieved of all liability in respect of obligations incurred to the Client which it cannot fulfil for reasons beyond its control.<br/>
+					7.2. The Company’s entire liability to the Client under this Agreement including but not limited to the Services provided shall not exceed the price payable to us by you under the Contract to which any claim relates.<br/>
+					7.3. The Company shall not be liable for loss of profits, business, contracts, revenue, damage to the Client’s reputation or goodwill, anticipated savings, and or any other indirect or consequential loss or damage whatsoever<br/>
+					7.4. The Company shall incur no liability to the Client for innocent or negligent misrepresentation by virtue of any statement made by or on behalf of us prior to the Agreement, whether orally or in writing, and you shall not be entitled to rescind the Agreement on the grounds of any such misrepresentation
+					</p>
+					<p>8. CONFIDENTIALITY<br/>
+					8.1. Both parties agree not to use nor disclose to third persons any of the other party's Confidential Information subject to clause 8.2, and in order for us to provide the Services.<br/>
+					8.2. Either party may disclose Confidential Information of the other:<br/>
+					8.2.1. When required to do so by law or any regulatory authority, provided that party is required to disclose the Confidential Information, where practicable and legitimate to do so:<br/>
+						<ol style="list-style-type: lower-latin;margin-left: 5%;">
+							<li>Promptly notifies the owner of any such requirement; and</li>
+							<li>Co-operates with the owner regarding the manner, scope or timing of such disclosure or any action the owner may take to challenge the validity of such requirement.</li>
+						</ol>
+						
+					</p>
+					<p>9. DATA PROTECTION<br/>
+					9.1. Each party shall ensure that in the performance of its obligations under these Terms and Conditions it will at all times comply with the relevant provisions of the Data Protection Acts 1998 &amp; 2003.
+					</p>
+					<p>10. GOVERNING LAW<br/>
+					10.1 The above Terms and Conditions shall be governed by and construed in all respects in accordance with Irish law and the parties hereby submit to the non-exclusive jurisdiction of the Irish courts.
+					</p>
+				</div>
+			</div>
+		</template>
+		
+		
+		<!-- BUSINESS QUOTE -->
+		<template id="translationie_sale_modifications.translation_sale_mod_report_business">
+			<div class="page" style="font-size:11pt;">
+				<div style="text-align:center;font-weight:bold;color:#365F91;">
+					<p style="font-size:18pt;">Translation Services proposal</p>
+					<p style="font-size:10pt;">For</p>
+					<t t-if="doc.partner_id.parent_id">
+						<p style="font-size:18pt;" t-field="doc.partner_id.parent_id.name" />
+					</t>
+					<t t-if="not doc.partner_id.parent_id">
+						<p style="font-size:18pt;" t-field="doc.partner_id.name" />
+					</t>
+					<p style="font-size:16pt;">Reference: <span t-field="doc.name" /></p>
+				</div>
+				<br/>
+				<div style="width:100%;font-weight:bold;">
+					<p style="width:100%;font-size:12pt;color:#365F91;border-bottom:1px solid;">Your Request</p>
+				</div>
+				<table width="100%" style="font-weight:bold;">
+					<tr>
+						<td style="height:25px;width:20%;">Service:</td>
+						<td width="80%"><span t-field="doc.x_biz_service" /></td>
+					</tr>
+					
+					<tr>
+						<td style="height:25px;width:20%;">Languages:</td>
+						<td width="80%"><span t-field="doc.x_languages_fragment" /></td>
+					</tr>
+					<tr>
+						<td style="height:25px;width:20%;">Type of content:</td>
+						<td width="80%"><span t-field="doc.x_biz_content_type" /></td>
+					</tr>
+					<tr>
+						<td style="height:25px;width:20%;">Source file format:</td>
+						<td width="80%"><span t-field="doc.x_biz_source_format" /></td>
+					</tr>
+					<tr>
+						<td style="height:25px;width:20%;">Required target file format:</td>
+						<td width="80%"><span t-field="doc.x_biz_target_format" /></td>
+					</tr>
+				</table>
+				<br/>
+				<div>
+					<p style="font-size:12pt;color:#365F91;font-weight:bold;border-bottom: 1px solid;">Our Proposal</p>
+					<p>Our project managers will select a qualified translator and reviewer for this project to ensure accuracy, consistency and timely delivery. Below our suggested approach:</p>
+					<div>
+						<ul>
+							<li>Text translation, editing and proofreading</li>
+							<li>Final QA and Certification (if required)</li>
+							<li>Delivery</li>
+						</ul>
+					</div>
+				</div>
+				<br/>
+				<div>
+					<p style="font-size:12pt;color:#365F91;font-weight:bold;border-bottom: 1px solid;">Quotation</p>
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>Description</th>
+								<th>Source</th>
+								<th>Target</th>
+								<th class="text-right">Rate</th>
+								<th class="text-right">Quantity</th>
+								<th class="text-right">VAT</th>
+								<th class="text-right">Sub-total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr t-foreach="doc.order_line" t-as="l">
+								<td>
+									<span t-field="l.name" />
+								</td>
+								<td>
+									<span t-field="l.x_source" />
+								</td>
+								<td>
+									<span t-field="l.x_target" />
+								</td>
+								<td class="text-right">
+									<!--<span t-field="l.price_unit" t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>-->
+									<span t-esc="'%.3f'%(l.price_unit)"/>
+								</td>
+								<td class="text-right">
+									<span t-field="l.product_uom_qty" />
+								</td>
+								<td class="text-right">
+									<span t-field="l.x_vat_amount" t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+								</td>
+								<td class="text-right">
+									<span t-field="l.price_subtotal" t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					 <div class="row">
+						<div class="col-xs-4 pull-right">
+							<table class="table table-condensed">
+								<tr class="border-black">
+									<td><strong>Total Without Taxes</strong></td>
+									<td class="text-right">
+										<span t-field="doc.amount_untaxed"
+											t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+									</td>
+								</tr>
+								<tr>
+									<td>Taxes</td>
+									<td class="text-right">
+										<span t-field="doc.amount_tax"
+											t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+									</td>
+								</tr>
+								<tr class="border-black">
+									<td><strong>Total</strong></td>
+									<td class="text-right">
+										<span t-field="doc.amount_total"
+											t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<p> The above rate includes <strong><span t-field="doc.x_biz_service" /></strong></p>
+				</div>
+				<div style="page-break-after:always;">
+					<p style="font-size:12pt;color:#365F91;font-weight:bold;border-bottom: 1px solid;">Turnaround-time</p>
+					<p>Our estimated turnaround time is <strong><span t-field="doc.x_timeframe_days"/> working days.</strong> Please do let us know if you have specific requirements and we will be happy to adjust our schedule to your needs.</p>
+				</div>
+				<div>
+					<p style="font-size:12pt;color:#365F91;font-weight:bold;border-bottom: 1px solid;">Terms and Conditions</p>
+					<p>Our terms or payment are as follows:</p>
+					<ul>
+						<li>
+							For clients <span style="font-weight:bold;text-decoration:underline;">without</span> a credit account - <span style="color:red;">Deposit of 100% to be paid in advance for Minimum Charge Assignments. Deposit of 50% to be paid in advance for larger assignments.</span> 
+							Remaining balance to be paid within 30 days upon receipt of the final deliverable in accordance with our quality standards
+						</li>
+						<li>
+							For clients <span style="font-weight:bold;text-decoration:underline;">with</span> a credit account - Payment in full is required within 30 days upon receipt of the final deliverable in accordance with our quality standards.
+						</li>
+						<li>
+							Any amendments/additions required should be brought to the Project Manager's attention immediately. This may result in changes to the original cost or agreed delivery time.
+						</li>
+					</ul>
+				</div>
+				<br/>
+				<div>
+					<p style="font-size:12pt;color:#365F91;font-weight:bold;border-bottom: 1px solid;">Payment Details</p>
+					<p>We accept payment by credit card or bank transfer.</p>
+					<table>
+						<tr>
+							<td colspan="3">For the purpose of a bank transfer, please find the details below:</td>
+						</tr>
+						<tr>
+							<td>Name:</td>
+							<td>Translation.ie</td>
+						</tr>
+						<tr>
+							<td>Branch:</td>
+							<td>Bank of Ireland Ballsbridge, Dublin 4</td>
+						</tr>
+						<tr>
+							<td>Sort code:</td>
+							<td>900973</td>
+							<td>BIC: BOFIIE2D</td>
+						</tr>
+						<tr>
+							<td style="padding-right:8px">Account no:</td>
+							<td>91055719</td>
+							<td>IBAN: IE86 BOFI 9009 7391 0557 19</td>
+						</tr>
+					</table>
+				</div>
+				<br/>
+				<div>
+					<p style="font-size:12pt;color:#365F91;font-weight:bold;border-bottom: 1px solid;">Other Services</p>
+					<p>Translation.ie also offers:</p>
+					<ul>
+						<li>Website and Software Localisation services</li>
+						<li>QA and Testing</li>
+						<li>Language Review Services</li>
+						<li>Multimedia</li>
+						<li>Translation/Localisation of Product and Documentation Material</li>
+						<li>Certified Translation Services</li>
+					</ul>
+					<p>Do not hesitate to contact us for any query you may have</p>
+				</div>
+				<br/>
+				<div>
+					<p style="font-size:12pt;color:#365F91;font-weight:bold;border-bottom: 1px solid;">Contact Details</p>
+					<table width="30%">
+						<tr>
+							<td width="50%">Project Manager:</td>
+							<td width="50%"><strong><span t-field="doc.user_id.name" /></strong></td>
+						</tr>
+						<tr>
+							<td width="50%">Email:</td>
+							<td width="50%"><a t-attf-href="mailto:{{doc.user_id.email}}" t-field="doc.user_id.email" /></td>
+						</tr>
+						<tr>
+							<td width="50%">Tel:</td>
+							<td width="50%"><span t-field="doc.user_id.phone" /></td>
+						</tr>
+						<tr>
+							<td width="50%">Fax:</td>
+							<td width="50%"><span t-field="doc.user_id.fax" /></td>
+						</tr>
+					</table>
+				</div>
+				<br/>
+				<br/>
+				<div style="page-break-after:always;">
+					<table>
+						<tr>
+							<td><strong>Translation.ie</strong></td>
+						</tr>
+						<tr>
+							<td>46 Mount Street Upper</td>
+						</tr>
+						<tr>
+							<td>Dublin 2, D02 RX88</td>
+						</tr>
+						<tr>
+							<td>www.translation.ie</td>
+						</tr>
+					</table>
+				</div>
+				<div style="page-break-after:always;font-size:7.5pt;font-kerning:auto;">
+					<h3>Terms and Conditions of Service</h3>
+					<p style="text-weight:bold;text-decoration:underline;">Definitions:</p>
+					<p>For the purpose of these Terms and Conditions "the Company", "we", "our" or "us" refers to Translation.ie(company no. 290402 whose registered office is at 46 Mount Street Upper, Dublin 2
+					and “Client” or “you” represents the company, firm, body, organisation, or person contracting Translation.ie to undertake service(s) on its behalf.<br/>
+					“Agreement” is defined as the agreement between the Client and the Company governed by the Terms and Conditions of service.<br/>
+					“Terms and Conditions” means these standard Terms and Conditions as set out below.<br/>
+					“Order” means a confirmed request by you for our Services.<br/>
+					“Services” means translation services performed by us for you.<br/>
+					“Work materials” means any information communicated or transmitted to us by you in order to perform the Services provided herein.<br/>
+					“Confidential Information” means information (in any form) which is confidential either to you or to us and which either you disclose to us or we disclose to you in connection with the Services.
+					</p>
+					<p>In submitting an Order, the Client enters into a binding Agreement with the Company, covered by the following Terms and Conditions:</p>
+					<p>1. APPLICATION<br/>
+					No conditions other than those set out herein nor any variation thereof shall be binding on the Company unless otherwise specifically agreed in writing by an officer of the Company. 
+					These conditions shall be incorporated in every quotation, acceptance and contract for work by us subject to the foregoing; any conditions proposed by the Client are hereby excluded.
+					</p>
+					<p>2. INTENDED USE OF TRANSLATION SERVICES<br/>
+					2.1. The Client shall clearly indicate in writing the intended use of the translation.<br/>
+					2.2. Unless otherwise requested in writing a translation is undertaken for information and understanding only, which is of a high enough standard for use in general correspondence.<br/>
+					2.3. If requested in writing, the translation may be the final document which will not be further edited by the Client or other-related third parties.
+					</p>
+					<p>3. QUOTATIONS<br/>
+					3.1. Quotations are not binding on the Company and are given subject to confirmation by the Company upon receipt of the Client’s order. No Agreement shall be concluded until such confirmation is given. Written quotations remain valid for 30 days after despatch and thereafter will lapse unless otherwise stated in writing.<br/>
+					3.2. Quotations are given on the basis of the Client’s description of the source material, the purpose of the translation and any other instructions. Such quotations may be amended at any time if, in our opinion, the description of the source materials is materially inadequate or inaccurate
+					</p>
+					<p>4. PAYMENT<br/>
+					4.1. Unless otherwise stated, prices are in euro and are exclusive of value added tax. We shall invoice you for all appropriate taxes and expenses for which we are liable to collect. You shall be liable to pay any penalties or interest on such taxes which are payable by us as a result of your delay in paying such charges.<br/>
+					4.2. Payment is requested by direct bank transfer or by credit card via direct contact with our office unless otherwise specified in writing on the invoice. All payments shall be made without deduction or set-off of bank charges.<br/>
+					4.3. Normal payment terms are 50% payment on confirmation of order and 50% on the date the translation is to be released.<br/>
+					4.4. Where credit accounts are approved and opened for a Client, payment must be received within 30 days of the date on which the invoice is issued unless specifically agreed in writing by an officer of the Company.<br/>
+					4.5. Quotations in a currency other than euro are based on the rate of exchange at the time of quoting and, unless otherwise stated, the price is subject to exchange rate fluctuations at the date of invoice.<br/>
+					4.6. Failure to pay any invoice in accordance with these Terms and Conditions or any others specified in writing at the time, shall entitle us to suspend further work both on the same order, and on any other order from you, without prejudice to any other right we may have.
+					</p>
+					<p>5. COMPLETION OF WORK<br/>
+					5.1. A date agreed by the Company for delivery is given and intended as an estimate only. The Company will make every endeavour to meet such an estimated date but shall not be liable to make good any damage or loss, whether arising directly or indirectly out of its failure to meet such estimated date. Whilst we shall make every reasonable effort to meet the Client’s requirements, late delivery shall not entitle the Client to withhold payment for Services provided.<br/>
+					5.2. The Client and the Company may, at any time after such date, in regard to the original anticipated delivery period, agree a further date for delivery, and if delivery has not taken place by such a date, no charge will be made and the Contract will be considered cancelled.<br/>
+					5.3. The Company reserves the right to sub-contract all or part of the work to an approved contractor(s) of its choice. We will not be liable in any circumstances for the consequences of failure to deliver or perform if the delay or failure is due to the non-delivery or non-performance by its sub-contractors.
+					</p>
+					<p>6. CANCELLATION AND SUSPENSION<br/>
+					6.1. If the Client for any reason cancels work which has been commissioned, charges will be payable for all the completed work up to the cancellation date and for all other costs and expenses which may accrue as a result of such cancellation.<br/>
+					6.2. If the Client suspends or postpones work commissioned for a period of 21 days or more, charges will be payable for all commissioned work up to the date of suspension or postponement and for all other cost and expenses which may accrue as a result of such suspension.
+					</p>
+					<p>7. LIABILITY<br/>
+					7.1. The Company shall be relieved of all liability in respect of obligations incurred to the Client which it cannot fulfil for reasons beyond its control.<br/>
+					7.2. The Company’s entire liability to the Client under this Agreement including but not limited to the Services provided shall not exceed the price payable to us by you under the Contract to which any claim relates.<br/>
+					7.3. The Company shall not be liable for loss of profits, business, contracts, revenue, damage to the Client’s reputation or goodwill, anticipated savings, and or any other indirect or consequential loss or damage whatsoever<br/>
+					7.4. The Company shall incur no liability to the Client for innocent or negligent misrepresentation by virtue of any statement made by or on behalf of us prior to the Agreement, whether orally or in writing, and you shall not be entitled to rescind the Agreement on the grounds of any such misrepresentation
+					</p>
+					<p>8. CONFIDENTIALITY<br/>
+					8.1. Both parties agree not to use nor disclose to third persons any of the other party's Confidential Information subject to clause 8.2, and in order for us to provide the Services.<br/>
+					8.2. Either party may disclose Confidential Information of the other:<br/>
+					8.2.1. When required to do so by law or any regulatory authority, provided that party is required to disclose the Confidential Information, where practicable and legitimate to do so:<br/>
+						<ol style="list-style-type: lower-latin;margin-left: 5%;">
+							<li>Promptly notifies the owner of any such requirement; and</li>
+							<li>Co-operates with the owner regarding the manner, scope or timing of such disclosure or any action the owner may take to challenge the validity of such requirement.</li>
+						</ol>
+						
+					</p>
+					<p>9. DATA PROTECTION<br/>
+					9.1. Each party shall ensure that in the performance of its obligations under these Terms and Conditions it will at all times comply with the relevant provisions of the Data Protection Acts 1998 &amp; 2003.
+					</p>
+					<p>10. GOVERNING LAW<br/>
+					10.1 The above Terms and Conditions shall be governed by and construed in all respects in accordance with Irish law and the parties hereby submit to the non-exclusive jurisdiction of the Irish courts.
+					</p>
+				</div>
+			</div>
+		</template>
+		
+	</data>
+</openerp>

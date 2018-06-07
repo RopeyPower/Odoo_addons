@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+	
+		<record id="sale_order_mod_form" model="ir.ui.view">
+			<field name="name">sale.order.modification.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//h1" position="replace">
+					<h1>
+						<field name="name" attrs="{'readonly':[('state','not in',('draft','sent'))]}" />
+					</h1>
+				</xpath>
+				<xpath expr="//button[@name='action_view_invoice']" position="after">
+					<field name="x_po_ids" invisible="1"/>
+					<button type="object" name="action_view_pos" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('x_po_count', '=', 0)]}">
+						<field name="x_po_count" widget="statinfo" string="Purchase Orders"/>
+					</button>
+				</xpath>
+				<xpath expr="//tree/field[@name='name']" position="after">
+					<field name="x_source" />
+					<field name="x_target" />
+				</xpath>
+				<xpath expr="//field[@name='client_order_ref']" position="after">
+					<field name="x_missing_lang" />
+				</xpath>
+				<xpath expr="(//notebook/page)[2]" position="after">
+					<page string="Quotation Information">
+						<group string="Standard Quote">
+							<field name="x_languages_fragment"/>
+							<field name="x_timeframe_days"/>
+						</group>
+						<group string="Business Quote">
+							<field name="x_biz_service" />
+							<field name="x_biz_content_type" />
+							<field name="x_biz_source_format" />
+							<field name="x_biz_target_format" />
+						</group>
+					</page>
+				</xpath>
+				<xpath  expr="//field[@name='date_order']" position="replace">
+					<field name="date_order" />
+				</xpath>
+				<xpath expr="//field[@name='date_order']" position="after">
+					<field name="x_start_date" />
+					<field name="x_due_date" />
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="sale_order_mod_search" model="ir.ui.view" >
+			<field name="name">sale.order.modification.search</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_sales_order_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='product_id']" position="after">
+					<field name="amount_total" />
+					<field name="x_source_id" />
+					<field name="x_target_id" />
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</openerp>
