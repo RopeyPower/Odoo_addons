@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+	
+		
+		
+		<record id="view_x_translation_languages" model="ir.ui.view">
+			<field name="name">x_res.languages.tree</field>
+			<field name="model">x_res.languages</field>
+			<field name="arch" type="xml">
+				<tree string="Translation Languages">
+					<field name="x_name" />
+					<field name="x_code" />
+					<field name="x_minimum" />
+					<field name="x_minimum_urgency" />
+					<field name="x_standard" />
+				</tree>
+			</field>
+		</record>
+		
+		<record id="edit_language" model="ir.ui.view">
+			<field name="name">x_res.languages.form</field>
+			<field name="model">x_res.languages</field>
+			<field name="arch" type="xml">
+				<form string="Translation Languages">
+					<sheet>
+						<group>
+							<field name="x_name" />
+							<field name="x_code" />
+						</group>
+						<group>
+							<field name="x_group" />
+							<field name="x_minimum" />
+							<field name="x_minimum_urgency" />
+							<field name="x_standard" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="view_x_translation_languages_filter" model="ir.ui.view">
+			<field name="name">x_res.languages.select</field>
+			<field name="model">x_res.languages</field>
+			<field name="arch" type="xml">
+				<search string="Search Languages">
+					<field name="x_name" string="Language Name" />
+					<field name="x_code" string="Language Code" />
+				</search>
+			</field>
+		</record>
+		
+		<record id="open_view_translation_languages" model="ir.actions.act_window">
+			<field name="name">Translation Languages</field>
+			<field name="res_model">x_res.languages</field>
+			<field name="view_type">form</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_x_translation_languages" />
+			<field name="search_view_id" ref="view_x_translation_languages_filter" />
+			<field name="context">{}</field>
+		</record>
+		
+		
+	</data>
+</openerp>
+	

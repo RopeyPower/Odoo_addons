@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+x_res.access_x_res_x_res_languages,x_res.x_res_languages,x_res.model_x_res_languages,project.group_project_user,1,0,0,0
+x_res.access_x_res_x_res_languages_project_manager,x_res.x_res_languages,x_res.model_x_res_languages,project.group_project_manager,1,1,0,0
+x_res.access_x_res_x_res_cat,x_res.x_res_cat,x_res.model_x_res_cat,project.group_project_user,1,0,0,0
+x_res.access_x_res_x_res_cat_project_manager,x_res.x_res_cat,x_res.model_x_res_cat,project.group_project_manager,1,1,1,0
+x_res.access_x_res_x_res_languages_pairs,x_res.x_res_languages_pairs,x_res.model_x_res_languages_pairs,project.group_project_user,1,0,0,0
+x_res.access_x_res_x_res_languages_pairs_project_manager,x_res.x_res_languages_pairs,x_res.model_x_res_languages_pairs,project.group_project_manager,1,1,1,1
+x_res.access_x_res_x_res_translator_status,x_res.x_res_translator_status,x_res.model_x_res_translator_status,project.group_project_user,1,0,0,0
+x_res.access_x_res_x_res_translator_status_project_manager,x_res.x_res_translator_status,x_res.model_x_res_translator_status,project.group_project_manager,1,1,1,0

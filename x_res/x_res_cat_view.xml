@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+		
+		
+		<record id="view_cat_tools" model="ir.ui.view">
+			<field name="name">x_res.cat.tree</field>
+			<field name="model">x_res.cat</field>
+			<field name="arch" type="xml" >
+				<tree string="CAT Tools">
+					<field name="x_name" />
+					<field name="x_description" />
+					<field name="x_package" />
+				</tree>
+			</field>
+		</record>
+		
+		<record id="edit_cat_tool" model="ir.ui.view">
+			<field name="name">x_res.cat.form</field>
+			<field name="model">x_res.cat</field>
+			<field name="arch" type="xml">
+				<form string="CAT Tools">
+					<sheet>
+						<group>
+							<field name="x_name" />
+							<field name="x_description" />
+							<field name="x_package" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="view_cat_tools_filter" model="ir.ui.view">
+			<field name="name">x_res.cat.select</field>
+			<field name="model">x_res.cat</field>
+			<field name="arch" type="xml">
+				<search string="Searc Cat Tools">
+					<field name="x_name" string="CAT Tool" />
+					<field name="x_package" string="Globalsight Package" />
+				</search>
+			</field>
+		</record>
+		
+		<record id="open_view_cat_tools" model="ir.actions.act_window">
+			<field name="name">Cat Tools</field>
+			<field name="res_model">x_res.cat</field>
+			<field name="view_type">form</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_cat_tools" />
+			<field name="search_view_id" ref="view_cat_tools_filter" />
+			<field name="context">{}</field>
+		</record>
+		
+		<menuitem name="Vendor information"
+			id="menu_vendor_info"
+			parent="account.menu_finance_configuration"
+			sequence="11"/>
+		
+		
+		
+		<menuitem name="CAT Tools"
+			id="menu_cat_tools"
+			parent="menu_vendor_info"
+			action="open_view_cat_tools"
+			sequence="11"/>
+			
+		<menuitem name="Translation Languages"
+			id="menu_x_translation_languages"
+			parent="menu_vendor_info"
+			action="open_view_translation_languages"
+			sequence="10"/>
+			
+		
+	</data>
+</openerp>
