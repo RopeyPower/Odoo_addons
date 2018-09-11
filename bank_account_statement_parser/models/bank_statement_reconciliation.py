@@ -13,15 +13,6 @@ class BankStatement(models.Model):
 	_inherit = 'account.bank.statement'
 	
 	sanity_mode = fields.Boolean(string='Sanity Mode', default=False, help='search duplicates for transactions named HSE (the duplicate should be named HEALTH SERVICE EXECUTIVE) or WRXXXX (we will search if the sale order XXXX is already reconciled)')
-	
-	@api.multi
-	def write(self, vals):
-		try:
-			_logger.debug("SAVING STATEMENT")
-			result = super(BankStatement, self).write(vals)
-			return result
-		except Exception:
-			_logger.error("Error Saving Statement", exc_info=True)
 
 class BankStatementLine(models.Model):
 	_inherit = 'account.bank.statement.line'
@@ -36,10 +27,26 @@ class BankStatementLine(models.Model):
 	suggestions_end_date = fields.Date(compute='_suggestions_end_date')
 	reconciliation_suggestions = fields.One2many('account.move', 'suggested_statement_id', string='Reconciliation Suggestions', compute='_reconciliation_suggestions')
 	
+	reconciled_with = fields.Char(compute='_reconciled_with')
+	
+	@api.depends('reconciled')
+	def _reconciled_with(self):
+		try:
+			for rec in self:
+				reconciled_with = ''
+				
+				if rec.journal_entry_ids.ids:
+					for entry in rec.journal_entry_ids:
+						reconciled_with += entry.display_name + ', '
+						
+				rec.reconciled_with = reconciled_with
+		except Exception:
+			_logger.error("ERROR FINDING RECONCILED ITEMS", exc_info=True)
+	
 	@api.one
 	@api.depends('statement_id.sanity_mode', 'date', 'amount', 'name')
 	def _duplicates(self):
-		if not isinstance(self.id, models.NewId):
+		if not isinstance(self.id, models.NewId) and not self.reconciled:
 			domain = [['name', '=', self.name], ['date', '=', self.date], ['amount', '=', self.amount], ['id', '!=', self.id]]
 			if self.statement_id.sanity_mode:
 				additionnal_domain = self._sanity_duplicate_research()

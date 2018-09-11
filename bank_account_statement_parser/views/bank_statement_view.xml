@@ -57,6 +57,7 @@
 				</xpath>-->
 				
 				<xpath expr="//field[@name='line_ids']/tree/field[@name='amount']" position="after">
+					<field name="reconciled_with" />
 					<field name="marked_as_duplicated" class="oe_edit_only"/>
 					<!-- "oe_edit_only" class doesn't work in a form subtree, see bug at https://github.com/odoo/odoo/issues/9273 -->
 					<field name="reconciled" invisible="1"/>
