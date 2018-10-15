@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+<template id="report_receipt_document">
+		<t t-call="report.external_layout">
+			<div class="page">
+				<div class="row">
+					<div>
+						<address style="font-size:25pt;" t-field="docs.partner_id"
+							t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+						<span t-if="docs.partner_id.vat">TIN: <span t-field="docs.partner_id.vat"/></span>
+					</div>
+				</div>
+				<div style="font-size:27pt;font-weight:bold;">
+					<span>Receipt</span>
+					<span t-field="docs.name" />
+				</div>
+				<t t-if="docs.invoice_ids[0].invoice_line_ids[0].sale_line_ids[0].order_id">
+					<div style="font-size:20pt;margin-top:2%">
+						<span>Order ID: </span>
+						<span t-field="docs.invoice_ids[0].invoice_line_ids[0].sale_line_ids[0].order_id" />
+					</div>
+				</t>
+				<div style="font-size:20pt;margin-top:5%">
+					<p>SALE TRANSACTION</p>
+					<p style="font-size:27pt;font-weight:bold;" t-field="docs.amount"/>
+					<p t-field="docs.payment_date" />
+				</div>
+			</div>
+		</t>
+</template>
+</data>
+</openerp>
