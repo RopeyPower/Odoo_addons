@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+		<report 
+			id="report_account_payment"
+			string="Receipt"
+			model="account.payment" 
+			report_type="qweb-pdf"
+			file="translationie_receipt_document.report_receipt_document" 
+			name="translationie_receipt_document.report_receipt_document" 
+		/>
+</data>
+</openerp>

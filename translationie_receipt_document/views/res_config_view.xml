@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="receipt_config_settings" model="ir.ui.view">
+			<field name="name">Receipt Settings</field>
+			<field name="model">sale.config.settings</field>
+			<field name="inherit_id" ref="sale.view_sales_config" />
+			<field name="arch" type="xml">
+				<xpath expr="(//group)[last()]" position="after">
+					<group string="Receipts" style="width:30%;">
+						<field name="receipt_mail_template" />
+					</group>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>
