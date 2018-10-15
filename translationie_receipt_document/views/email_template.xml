@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<record id="receipt_email_template" model="mail.template">
+			<field name="name">Customer Receipt Notification e-mail template</field>
+			<field name="email_from">${(object.user_id.email and '%s &lt;%s&gt;' % (object.user_id.name, object.user_id.email) or '')|safe}</field>
+			<field name="subject"> ${object.company_id.name} Order Ref ${object.name} Receipt</field>
+			<field name="partner_to">${object.partner_invoice_id.id}</field>
+			<field name="model_id" ref="sale.model_sale_order"/>
+			<field name="auto_delete" eval="False" />
+			<field name="body_html">
+				<![CDATA[
+					<p>Dear ${(object.partner_id.name)},</p>
+					<p>Please find a attached a record of your payment for Order Reference: ${(object.name)}.</p>
+					<p>If you have any further enquiries don't hesitate to contact us.</p>
+					<p>Regards,</p>
+					<p>${(object.user_id.name)}</p>
+				]]>
+			</field>
+		</record>
+		
+	</data>
+</odoo>
